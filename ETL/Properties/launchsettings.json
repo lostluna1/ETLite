@@ -1,0 +1,10 @@
+﻿{
+    "profiles": {
+      "ETL (Package)": {
+        "commandName": "MsixPackage"
+      },
+      "ETL (Unpackaged)": {
+        "commandName": "Project"
+      }
+    }
+}

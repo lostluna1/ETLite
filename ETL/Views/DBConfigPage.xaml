@@ -1,0 +1,129 @@
+﻿<Page
+    x:Class="ETL.Views.DBConfigPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="using:ETL.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:ETL.Views"
+    xmlns:local1="using:ETL.Models"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:models="using:ETL.Models"
+    d:DataContext="{d:DesignInstance Type=local:DBConfigPage}"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <converters:DatabaseTypeToImageConverter x:Key="DatabaseTypeToImageConverter" />
+    </Page.Resources>
+
+    <Grid x:Name="ContentArea" Padding="5">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <StackPanel
+            Grid.Row="0"
+            Grid.Column="1"
+            Margin="48,0,0,0">
+            <ComboBox
+                x:Name="DatabaseTypeComboBox"
+                x:Uid="DatabaseTypeComboBox"
+                Width="150"
+                Margin="0,0,0,20"
+                ItemsSource="{x:Bind Path=ViewModel.DatabaseTypes}"
+                SelectedItem="{x:Bind Path=ViewModel.SelectedDatabaseType, Mode=TwoWay}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate x:DataType="models:DatabaseType">
+                        <StackPanel Orientation="Horizontal">
+                            <Image
+                                Width="16"
+                                Height="16"
+                                Margin="0,0,10,0"
+                                Source="{Binding Converter={StaticResource DatabaseTypeToImageConverter}}" />
+                            <TextBlock VerticalAlignment="Center" Text="{Binding}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+            <TextBox
+                x:Name="ServerAddressTextBox"
+                Margin="0,0,0,20"
+                Header="服务器地址"
+                Text="{x:Bind Path=ViewModel.ServerAddress, Mode=TwoWay}" />
+
+            <TextBox
+                x:Name="DatabaseNameTextBox"
+                Margin="0,0,0,20"
+                Header="数据库名称"
+                Text="{x:Bind Path=ViewModel.DatabaseName, Mode=TwoWay}" />
+
+            <TextBox
+                x:Name="UsernameTextBox"
+                Margin="0,0,0,20"
+                Header="用户名"
+                Text="{x:Bind Path=ViewModel.Username, Mode=TwoWay}" />
+
+            <PasswordBox
+                x:Name="PasswordBox"
+                Margin="0,0,0,20"
+                Header="密码"
+                Password="{x:Bind Path=ViewModel.Password, Mode=TwoWay}" />
+
+            <TextBox
+                x:Name="ConnectionNameTextBox"
+                Margin="0,0,0,20"
+                Header="连接名称"
+                Text="{x:Bind Path=ViewModel.ConnectionName, Mode=TwoWay}" />
+
+            <StackPanel Orientation="Horizontal">
+                <Button Command="{x:Bind Path=ViewModel.ConnectCommand}" Content="测试连接" />
+                <Button
+                    Margin="10,0,0,0"
+                    Command="{x:Bind Path=ViewModel.SaveCommand}"
+                    Content="保存"
+                    Style="{StaticResource AccentButtonStyle}" />
+            </StackPanel>
+        </StackPanel>
+
+        <ListView
+            Grid.Row="0"
+            Grid.Column="0"
+            HorizontalAlignment="Left"
+            ItemsSource="{x:Bind Path=ViewModel.SavedConnections}"
+            RightTapped="ListView_RightTapped"
+            SelectedItem="{x:Bind Path=ViewModel.SelectedConnection, Mode=TwoWay}">
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="local1:ConnectionInfo">
+                    <StackPanel Orientation="Horizontal">
+                        <Image
+                            Width="36"
+                            Height="36"
+                            Margin="0,0,10,0"
+                            Source="{Binding DatabaseType, Converter={StaticResource DatabaseTypeToImageConverter}}" />
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                FontWeight="Bold"
+                                Text="{Binding ConnectionName}" />
+                            <TextBlock VerticalAlignment="Center" Text="{Binding ServerAddress}" />
+                        </StackPanel>
+                    </StackPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.ContextFlyout>
+                <MenuFlyout>
+                    <MenuFlyoutItem Command="{x:Bind Path=ViewModel.DeleteConnectionCommand}" Text="删除" />
+                </MenuFlyout>
+            </ListView.ContextFlyout>
+        </ListView>
+
+        <Button
+            Grid.Row="1"
+            Command="{x:Bind Path=ViewModel.NewConnectionCommand}"
+            Content="新建连接"
+            Style="{StaticResource AccentButtonStyle}" />
+    </Grid>
+</Page>
