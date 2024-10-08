@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+
 using Windows.Globalization;
 
 namespace ETL;
@@ -79,6 +80,10 @@ public partial class App : Application
             services.AddSingleton<IFileService, FileService>();
 
             // Views and ViewModels
+            services.AddTransient<Step2ViewModel>();
+            services.AddTransient<Step2Page>();
+            services.AddTransient<Step1ViewModel>();
+            services.AddTransient<Step1Page>();
             services.AddTransient<DBConfigViewModel>();
             services.AddTransient<DBConfigPage>();
             services.AddTransient<SettingsViewModel>();

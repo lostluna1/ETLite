@@ -209,4 +209,10 @@
   <data name="Settings_Language.Text" xml:space="preserve">
     <value>Settings Language</value>
   </data>
+  <data name="Shell_Step1.Content" xml:space="preserve">
+    <value>Step1</value>
+  </data>
+  <data name="Shell_Step2.Content" xml:space="preserve">
+    <value>Step2</value>
+  </data>
 </root>

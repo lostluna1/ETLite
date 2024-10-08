@@ -1,0 +1,13 @@
+﻿<Page
+    x:Class="ETL.Views.Step2Page"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.microsoft.com/markup-compatibility/2006"
+    >
+
+    <StackPanel>
+        <TextBlock Text="这是第二步" />
+        <Button Click="BackButton_Click" Content="Back" />
+    </StackPanel>
+</Page>
