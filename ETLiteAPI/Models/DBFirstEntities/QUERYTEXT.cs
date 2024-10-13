@@ -19,7 +19,7 @@ namespace ETLiteAPI.Models {
 		public uint? QUERYDEFID { get; set; }
 
 		[JsonProperty, Column(DbType = "CLOB")]
-		public string QUERYTEXT { get; set; }
+		public string QueryTEXT { get; set; }
 
 		[JsonProperty]
 		public uint? QUERYTEXTID { get; set; }

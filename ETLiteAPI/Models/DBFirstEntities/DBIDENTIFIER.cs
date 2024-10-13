@@ -19,7 +19,7 @@ namespace ETLiteAPI.Models {
 		public DateTime? ASSIGNMENTTIMESTAMP { get; set; }
 
 		[JsonProperty, Column(DbType = "CHAR(10 BYTE)")]
-		public string DBIDENTIFIER { get; set; }
+		public string DbIDENTIFIER { get; set; }
 
 	}
 

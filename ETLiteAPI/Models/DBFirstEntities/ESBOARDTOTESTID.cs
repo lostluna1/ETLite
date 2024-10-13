@@ -13,7 +13,7 @@ namespace ETLiteAPI.Models {
 	public partial class ESBOARDTOTESTID {
 
 		[JsonProperty, Column(Name = "ES_BOARDTOTESTID", DbType = "CHAR(16 BYTE)", IsPrimary = true, IsNullable = false)]
-		public string ESBOARDTOTESTID { get; set; }
+		public string EsBOARDTOTESTID { get; set; }
 
 		[JsonProperty]
 		public uint? CDOTYPEID { get; set; }

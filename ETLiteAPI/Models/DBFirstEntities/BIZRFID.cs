@@ -13,7 +13,7 @@ namespace ETLiteAPI.Models {
 	public partial class BIZRFID {
 
 		[JsonProperty, Column(Name = "BIZ_RFID", DbType = "CHAR(16 BYTE)", IsPrimary = true, IsNullable = false)]
-		public string BIZRFID { get; set; }
+		public string BizRFID { get; set; }
 
 		[JsonProperty, Column(Name = "BIZ_RFIDNAME", DbType = "VARCHAR2(64 BYTE)")]
 		public string BIZRFIDNAME { get; set; }

@@ -31,7 +31,7 @@ namespace ETLiteAPI.Models {
 		public uint? ESLOGCIOERRORFILES { get; set; }
 
 		[JsonProperty, Column(Name = "ES_OMLCONNECTOR", DbType = "VARCHAR2(40 BYTE)")]
-		public string ESOMLCONNECTOR { get; set; }
+		public string EsOMLCONNECTOR { get; set; }
 
 		[JsonProperty, Column(Name = "ES_OMLCONNECTORLISTID", DbType = "CHAR(16 BYTE)")]
 		public string ESOMLCONNECTORLISTID { get; set; }
