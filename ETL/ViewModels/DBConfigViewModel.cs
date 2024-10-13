@@ -81,15 +81,35 @@ public partial class DBConfigViewModel : ObservableValidator
         Password = null;
         ConnectionName = null;
     }
-
     [RelayCommand]
-    private void DeleteConnection()
+    private async Task DeleteConnectionAsync()
     {
         if (SelectedConnection != null)
         {
-            ConnectionManager.Instance.RemoveConnection(SelectedConnection); // 使用单例
+            using var httpClient = new HttpClient();
+            var response = await httpClient.DeleteAsync($"https://localhost:7220/api/connections/{SelectedConnection.ConnectionName}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                ConnectionManager.Instance.RemoveConnection(SelectedConnection); // 使用单例
+                Debug.WriteLine("连接已删除");
+                await ShowDialogAsync("删除成功", "连接已删除");
+            }
+            else
+            {
+                Debug.WriteLine("删除失败");
+                await ShowDialogAsync("删除失败", "无法删除连接");
+            }
         }
     }
+    /*    [RelayCommand]
+        private void DeleteConnection()
+        {
+            if (SelectedConnection != null)
+            {
+                ConnectionManager.Instance.RemoveConnection(SelectedConnection); // 使用单例
+            }
+        }*/
 
     [RelayCommand]
     private async Task SaveAsync()
@@ -111,11 +131,33 @@ public partial class DBConfigViewModel : ObservableValidator
             Password = Password
         };
 
-        ConnectionManager.Instance.AddConnection(connectionInfo); // 使用单例
+        // 检查连接名称是否已经存在
+        var existingConnection = ConnectionManager.Instance.SavedConnections
+            .FirstOrDefault(c => c.ConnectionName == ConnectionName);
 
-        Debug.WriteLine("连接信息已保存");
-        await ShowDialogAsync("保存成功", "连接信息已保存");
+        if (existingConnection != null)
+        {
+            // 更新现有连接
+            existingConnection.DatabaseType = SelectedDatabaseType;
+            existingConnection.ServerAddress = ServerAddress;
+            existingConnection.DatabaseName = DatabaseName;
+            existingConnection.Username = Username;
+            existingConnection.Password = Password;
+
+            Debug.WriteLine("连接信息已更新");
+            ConnectionManager.Instance.UpdateConnection(connectionInfo);
+
+            await ShowDialogAsync("更新成功", "连接信息已更新");
+        }
+        else
+        {
+            // 新建连接
+            ConnectionManager.Instance.AddConnection(connectionInfo);
+            Debug.WriteLine("连接信息已保存");
+            await ShowDialogAsync("保存成功", "连接信息已保存");
+        }
     }
+
 
     [RelayCommand]
     private async Task ConnectAsync()

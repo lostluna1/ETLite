@@ -14,6 +14,7 @@
         Background="{ThemeResource AcrylicBackgroundFillColorDefaultBrush}"
         BorderBrush="{ThemeResource SurfaceStrokeColorFlyoutBrush}"
         CornerRadius="8">
+
         <Grid.Resources>
             <ResourceDictionary>
                 <ResourceDictionary.ThemeDictionaries>
@@ -43,7 +44,7 @@
             VerticalAlignment="Stretch"
             RowSpacing="16">
             <Grid.RowDefinitions>
-                <RowDefinition Height="56" />
+                <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
             <ContentPresenter
