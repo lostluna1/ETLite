@@ -7,24 +7,19 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(DisableSyncStructure = true)]
+	
 	public partial class SECURITYMASKDETAIL {
 
-		[JsonProperty, Column(IsPrimary = true)]
 		public uint SECURITYMASKDETAILID { get; set; }
 
-		[JsonProperty]
 		public uint? BITNUMBER { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(255 BYTE)")]
 		public string DESCRIPTION { get; set; }
 
-		[JsonProperty]
 		public uint? DISPLAYTEXTLABELID { get; set; }
 
-		[JsonProperty]
 		public uint? SECURITYMASKID { get; set; }
 
 	}

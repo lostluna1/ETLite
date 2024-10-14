@@ -7,24 +7,19 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(DisableSyncStructure = true)]
+	
 	public partial class SAMPLETESTSAMPLEDATAPOINTS {
 
-		[JsonProperty, Column(IsPrimary = true)]
 		public uint FIELDID { get; set; }
 
-		[JsonProperty, Column(DbType = "CHAR(16 BYTE)", IsPrimary = true, IsNullable = false)]
 		public string SAMPLETESTID { get; set; }
 
-		[JsonProperty, Column(IsPrimary = true)]
 		public uint SEQUENCE { get; set; }
 
-		[JsonProperty, Column(DbType = "CHAR(16 BYTE)")]
 		public string SAMPLEDATAPOINTSBASEID { get; set; }
 
-		[JsonProperty, Column(DbType = "CHAR(16 BYTE)")]
 		public string SAMPLEDATAPOINTSID { get; set; }
 
 	}

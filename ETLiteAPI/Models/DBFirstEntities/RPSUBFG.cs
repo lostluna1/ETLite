@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(Name = "RP_SUB_FG", DisableSyncStructure = true)]
+	
 	public partial class RPSUBFG {
 
 		[JsonProperty, Column(Name = "CREATION_DATE", DbType = "DATE(7)")]

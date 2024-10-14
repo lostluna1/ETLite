@@ -7,30 +7,23 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(DisableSyncStructure = true)]
+	
 	public partial class CIOFILTEROBJECTS {
 
-		[JsonProperty, Column(DbType = "CHAR(16 BYTE)", IsPrimary = true, IsNullable = false)]
 		public string CIOFILTEROBJECTSID { get; set; }
 
-		[JsonProperty]
 		public uint? CDOTYPEID { get; set; }
 
-		[JsonProperty]
 		public uint? CHANGECOUNT { get; set; }
 
-		[JsonProperty, Column(DbType = "CHAR(16 BYTE)")]
 		public string CIOFILTERID { get; set; }
 
-		[JsonProperty, Column(DbType = "CHAR(16 BYTE)")]
 		public string CIOFILTEROBJECTID { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(36 BYTE)")]
 		public string EXPORTIMPORTKEY { get; set; }
 
-		[JsonProperty]
 		public uint? USEROR { get; set; }
 
 	}

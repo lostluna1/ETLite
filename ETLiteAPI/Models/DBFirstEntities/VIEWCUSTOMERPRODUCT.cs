@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(Name = "VIEW_CUSTOMERPRODUCT", DisableSyncStructure = true)]
+	
 	public partial class VIEWCUSTOMERPRODUCT {
 
 		[JsonProperty, Column(Name = "BIZ_CUSTOMERPRODUCTID", DbType = "CHAR(16 BYTE)", IsNullable = false)]

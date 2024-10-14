@@ -7,84 +7,59 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(DisableSyncStructure = true)]
+	
 	public partial class CDODEFINITION {
 
-		[JsonProperty]
 		public uint? CDODEFID { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(4000 BYTE)")]
 		public string CDODESCRIPTION { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(37 BYTE)")]
 		public string CDONAME { get; set; }
 
-		[JsonProperty]
 		public uint? CDOUSAGEMASK { get; set; }
 
-		[JsonProperty]
 		public uint? DEFAULTTABLEID { get; set; }
 
-		[JsonProperty]
 		public uint? DISPLAYNAMELABELID { get; set; }
 
-		[JsonProperty]
 		public bool? ENFORCEINTEGRITY { get; set; }
 
-		[JsonProperty]
 		public uint? FEATUREID { get; set; }
 
-		[JsonProperty]
 		public uint? INHERITMASK { get; set; }
 
-		[JsonProperty]
 		public bool? ISABSTRACT { get; set; }
 
-		[JsonProperty]
 		public bool? ISEXPOSEDTOCLIENTUI { get; set; }
 
-		[JsonProperty]
 		public bool? ISWSEXPOSEDSTD { get; set; }
 
-		[JsonProperty]
 		public uint? MAINTENANCETYPEID { get; set; }
 
-		[JsonProperty]
 		public uint? OBJECTSTOCACHE { get; set; }
 
-		[JsonProperty]
 		public uint? PARENTCDOID { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(50 BYTE)")]
 		public string READOVERRIDE { get; set; }
 
-		[JsonProperty]
 		public uint? REVISIONTYPEID { get; set; }
 
-		[JsonProperty]
 		public uint? SECURITYTYPEID { get; set; }
 
-		[JsonProperty]
 		public uint? SELVALQUERYDEFID { get; set; }
 
-		[JsonProperty]
 		public uint? STORAGECATEGORYID { get; set; }
 
-		[JsonProperty]
 		public uint? UIDETAILSID { get; set; }
 
-		[JsonProperty]
 		public bool? USEINSTANCESECURITY { get; set; }
 
-		[JsonProperty]
 		public uint? VISIBILITY { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(5 BYTE)")]
 		public string WORKSPACECODE { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(50 BYTE)")]
 		public string WRITEOVERRIDE { get; set; }
 
 	}

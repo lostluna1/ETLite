@@ -7,48 +7,35 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(DisableSyncStructure = true)]
+	
 	public partial class CIOJOURNALPERSIST {
 
-		[JsonProperty, Column(DbType = "CHAR(16 BYTE)", IsPrimary = true, IsNullable = false)]
 		public string CIOJOURNALPERSISTID { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(512 BYTE)")]
 		public string BROADCASTADDRESS { get; set; }
 
-		[JsonProperty]
 		public uint? BROADCASTPORT { get; set; }
 
-		[JsonProperty]
 		public uint? CDOTYPEID { get; set; }
 
-		[JsonProperty]
 		public uint? CHANGECOUNT { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(255 BYTE)")]
 		public string CIOJOURNALTYPE { get; set; }
 
-		[JsonProperty]
 		public uint? COMPRESSINTERVAL { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(512 BYTE)")]
 		public string CONNECTIONNAME { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(36 BYTE)")]
 		public string EXPORTIMPORTKEY { get; set; }
 
-		[JsonProperty]
 		public uint? ISFROZEN { get; set; }
 
-		[JsonProperty, Column(DbType = "CHAR(16 BYTE)")]
 		public string PARENTID { get; set; }
 
-		[JsonProperty]
 		public uint? PERSISTINTERVAL { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(50 BYTE)")]
 		public string STORENAME { get; set; }
 
 	}

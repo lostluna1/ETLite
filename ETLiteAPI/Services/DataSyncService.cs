@@ -123,7 +123,7 @@ public class DataSyncService : IDataSyncService
         {
             "MySQL" => $"Server={info.ServerAddress};Database={info.DatabaseName};User Id={info.Username};Password={info.Password};",
             "PostgreSQL" => $"Host={info.ServerAddress};Database={info.DatabaseName};Username={info.Username};Password={info.Password};",
-            "SQLServer" => $"Server={info.ServerAddress};Database={info.DatabaseName};User Id={info.Username};Password={info.Password};",
+            "SQL Server" => $"Server={info.ServerAddress};Database={info.DatabaseName};User Id={info.Username};Password={info.Password};",
             "Oracle" => $"User Id={info.Username};Password={info.Password};Data Source={info.ServerAddress}/{info.DatabaseName};",
             _ => throw new NotSupportedException($"不支持的数据库类型: {info.DatabaseType}")
         };
@@ -135,7 +135,7 @@ public class DataSyncService : IDataSyncService
         {
             "MySQL" => DataType.MySql,
             "PostgreSQL" => DataType.PostgreSQL,
-            "SQLServer" => DataType.SqlServer,
+            "SQL Server" => DataType.SqlServer,
             "Oracle" => DataType.Oracle,
             _ => throw new NotSupportedException($"不支持的数据库类型: {databaseType}")
         };

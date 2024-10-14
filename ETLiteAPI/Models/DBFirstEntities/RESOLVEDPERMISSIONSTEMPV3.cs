@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(Name = "RESOLVEDPERMISSIONS_TEMPV3", DisableSyncStructure = true)]
+	
 	public partial class RESOLVEDPERMISSIONSTEMPV3 {
 
 		[JsonProperty, Column(DbType = "VARCHAR2(255 BYTE)")]

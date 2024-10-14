@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(Name = "BIZ_RFID", DisableSyncStructure = true)]
+	
 	public partial class BIZRFID {
 
 		[JsonProperty, Column(Name = "BIZ_RFID", DbType = "CHAR(16 BYTE)", IsPrimary = true, IsNullable = false)]
-		public string BizRFID { get; set; }
+		public string BIZ_RFID { get; set; }
 
 		[JsonProperty, Column(Name = "BIZ_RFIDNAME", DbType = "VARCHAR2(64 BYTE)")]
 		public string BIZRFIDNAME { get; set; }

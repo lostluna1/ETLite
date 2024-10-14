@@ -7,33 +7,25 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(DisableSyncStructure = true)]
+	
 	public partial class COMPUTATIONPARAMMAP {
 
-		[JsonProperty, Column(DbType = "CHAR(16 BYTE)", IsPrimary = true, IsNullable = false)]
 		public string COMPUTATIONPARAMMAPID { get; set; }
 
-		[JsonProperty]
 		public uint? CDOTYPEID { get; set; }
 
-		[JsonProperty]
 		public uint? CHANGECOUNT { get; set; }
 
-		[JsonProperty, Column(DbType = "CHAR(16 BYTE)")]
 		public string COMPUTATIONVARIABLEID { get; set; }
 
-		[JsonProperty, Column(DbType = "CHAR(16 BYTE)")]
 		public string DATAPOINTID { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(36 BYTE)")]
 		public string EXPORTIMPORTKEY { get; set; }
 
-		[JsonProperty]
 		public uint? ISFROZEN { get; set; }
 
-		[JsonProperty, Column(DbType = "CHAR(16 BYTE)")]
 		public string PARENTID { get; set; }
 
 	}

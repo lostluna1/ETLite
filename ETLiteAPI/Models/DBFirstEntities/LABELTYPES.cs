@@ -7,15 +7,13 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(DisableSyncStructure = true)]
+	
 	public partial class LABELTYPES {
 
-		[JsonProperty, Column(IsPrimary = true)]
 		public uint LABELTYPEID { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(50 BYTE)")]
 		public string TYPEDESCRIPTION { get; set; }
 
 	}

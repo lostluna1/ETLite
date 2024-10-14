@@ -7,18 +7,15 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(DisableSyncStructure = true)]
+	
 	public partial class SYSTEMINFO {
 
-		[JsonProperty, Column(DbType = "VARCHAR2(255 BYTE)")]
 		public string INFONAME { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(255 BYTE)")]
 		public string INFOSOURCE { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(255 BYTE)")]
 		public string INFOVALUE { get; set; }
 
 	}

@@ -7,15 +7,13 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(DisableSyncStructure = true)]
+	
 	public partial class CIOCDOSERVICEUSAGE {
 
-		[JsonProperty, Column(DbType = "VARCHAR2(30 BYTE)")]
 		public string CDONAME { get; set; }
 
-		[JsonProperty]
 		public uint? ENDPOINTTYPE { get; set; }
 
 	}

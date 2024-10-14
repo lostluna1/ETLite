@@ -7,12 +7,11 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(DisableSyncStructure = true)]
+	
 	public partial class DELETECONTAINER {
 
-		[JsonProperty, Column(DbType = "CHAR(16 BYTE)")]
 		public string CONTAINERID { get; set; }
 
 	}

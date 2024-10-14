@@ -7,66 +7,47 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(DisableSyncStructure = true)]
+	
 	public partial class MODELINGESIGREQ {
 
-		[JsonProperty, Column(DbType = "CHAR(16 BYTE)", IsPrimary = true, IsNullable = false)]
 		public string MODELINGESIGREQID { get; set; }
 
-		[JsonProperty]
 		public uint? CDOTYPEID { get; set; }
 
-		[JsonProperty]
 		public uint? CHANGECOUNT { get; set; }
 
-		[JsonProperty, Column(DbType = "CHAR(16 BYTE)")]
 		public string CHANGEHISTORYID { get; set; }
 
-		[JsonProperty]
 		public uint? CREATEREQCLEARINHERIT { get; set; }
 
-		[JsonProperty, Column(DbType = "CHAR(16 BYTE)")]
 		public string CREATEREQUIREMENTID { get; set; }
 
-		[JsonProperty]
 		public uint? DELETEREQCLEARINHERIT { get; set; }
 
-		[JsonProperty, Column(DbType = "CHAR(16 BYTE)")]
 		public string DELETEREQUIREMENTID { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(255 BYTE)")]
 		public string DESCRIPTION { get; set; }
 
-		[JsonProperty, Column(DbType = "CLOB")]
 		public string FILTERTAGS { get; set; }
 
-		[JsonProperty]
 		public uint? FREEZEREQCLEARINHERIT { get; set; }
 
-		[JsonProperty, Column(DbType = "CHAR(16 BYTE)")]
 		public string FREEZEREQUIREMENTID { get; set; }
 
-		[JsonProperty]
 		public uint? ICONID { get; set; }
 
-		[JsonProperty]
 		public uint? ISFROZEN { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(30 BYTE)")]
 		public string MODELINGESIGREQNAME { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(2000 BYTE)")]
 		public string NOTES { get; set; }
 
-		[JsonProperty, Column(DbType = "CHAR(16 BYTE)")]
 		public string SETUPACCESSID { get; set; }
 
-		[JsonProperty]
 		public uint? UPDATEREQCLEARINHERIT { get; set; }
 
-		[JsonProperty, Column(DbType = "CHAR(16 BYTE)")]
 		public string UPDATEREQUIREMENTID { get; set; }
 
 	}

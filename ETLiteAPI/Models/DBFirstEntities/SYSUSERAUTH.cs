@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(Name = "SYS_USERAUTH", DisableSyncStructure = true)]
+	
 	public partial class SYSUSERAUTH {
 
 		[JsonProperty, Column(DbType = "NUMBER(22)", IsPrimary = true, InsertValueSql = "\"SIEMENSPRD\".\"ISEQ$$_313563\".nextval")]

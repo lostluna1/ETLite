@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(Name = "CSIVIEW_OPENORDERSSUMMARY", DisableSyncStructure = true)]
+	
 	public partial class CSIVIEWOPENORDERSSUMMARY {
 
 		[JsonProperty, Column(DbType = "NUMBER(22)")]

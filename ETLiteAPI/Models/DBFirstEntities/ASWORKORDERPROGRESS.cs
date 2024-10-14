@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(Name = "AS_WORKORDERPROGRESS", DisableSyncStructure = true)]
+	
 	public partial class ASWORKORDERPROGRESS {
 
 		[JsonProperty, Column(DbType = "VARCHAR2(100 BYTE)")]

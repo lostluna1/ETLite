@@ -7,36 +7,27 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(DisableSyncStructure = true)]
+	
 	public partial class STARTTIMERTXNMAP {
 
-		[JsonProperty, Column(DbType = "CHAR(16 BYTE)", IsPrimary = true, IsNullable = false)]
 		public string STARTTIMERTXNMAPID { get; set; }
 
-		[JsonProperty]
 		public uint? CDOTYPEID { get; set; }
 
-		[JsonProperty]
 		public uint? CHANGECOUNT { get; set; }
 
-		[JsonProperty]
 		public uint? ISFROZEN { get; set; }
 
-		[JsonProperty, Column(DbType = "CHAR(16 BYTE)")]
 		public string PARENTID { get; set; }
 
-		[JsonProperty, Column(DbType = "CHAR(16 BYTE)")]
 		public string PROCESSTIMERID { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(36 BYTE)")]
 		public string STARTTIMERTXNMAPNAME { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(30 BYTE)")]
 		public string TXNNAME { get; set; }
 
-		[JsonProperty]
 		public uint? TXNTYPE { get; set; }
 
 	}

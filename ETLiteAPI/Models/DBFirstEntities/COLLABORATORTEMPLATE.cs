@@ -7,42 +7,31 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(DisableSyncStructure = true)]
+	
 	public partial class COLLABORATORTEMPLATE {
 
-		[JsonProperty, Column(DbType = "CHAR(16 BYTE)", IsPrimary = true, IsNullable = false)]
 		public string COLLABORATORTEMPLATEID { get; set; }
 
-		[JsonProperty]
 		public uint? CDOTYPEID { get; set; }
 
-		[JsonProperty]
 		public uint? CHANGECOUNT { get; set; }
 
-		[JsonProperty, Column(DbType = "CHAR(16 BYTE)")]
 		public string CHANGEHISTORYID { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(40 BYTE)")]
 		public string COLLABORATORTEMPLATENAME { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(255 BYTE)")]
 		public string DESCRIPTION { get; set; }
 
-		[JsonProperty, Column(DbType = "CLOB")]
 		public string FILTERTAGS { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(4000 BYTE)")]
 		public string GENERALINSTRUCTIONS { get; set; }
 
-		[JsonProperty]
 		public uint? ICONID { get; set; }
 
-		[JsonProperty]
 		public uint? ISFROZEN { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(2000 BYTE)")]
 		public string NOTES { get; set; }
 
 	}

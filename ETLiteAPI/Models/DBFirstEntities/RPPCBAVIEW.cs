@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(Name = "RP_PCBAVIEW", DisableSyncStructure = true)]
+	
 	public partial class RPPCBAVIEW {
 
 		[JsonProperty, Column(DbType = "NUMBER(22)")]

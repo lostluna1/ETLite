@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(Name = "EVENT_CAPA_V", DisableSyncStructure = true)]
+	
 	public partial class EVENTCAPAV {
 
 		[JsonProperty]

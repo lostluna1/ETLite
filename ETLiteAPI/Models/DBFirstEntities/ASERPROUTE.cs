@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(Name = "AS_ERPROUTE", DisableSyncStructure = true)]
+	
 	public partial class ASERPROUTE {
 
 		[JsonProperty, Column(Name = "BIZ_ACTIVETIME", DbType = "NUMBER(22)")]

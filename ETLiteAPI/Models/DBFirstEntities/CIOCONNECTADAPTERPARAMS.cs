@@ -7,39 +7,29 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(DisableSyncStructure = true)]
+	
 	public partial class CIOCONNECTADAPTERPARAMS {
 
-		[JsonProperty, Column(DbType = "CHAR(16 BYTE)", IsPrimary = true, IsNullable = false)]
 		public string CONNECTADAPTERPARAMSID { get; set; }
 
-		[JsonProperty]
 		public uint? CDOTYPEID { get; set; }
 
-		[JsonProperty]
 		public uint? CHANGECOUNT { get; set; }
 
-		[JsonProperty, Column(DbType = "CHAR(16 BYTE)")]
 		public string CIODATABASEADAPTERID { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(30 BYTE)")]
 		public string CONNECTADAPTERPARAMSNAME { get; set; }
 
-		[JsonProperty]
 		public uint? DATALENGTH { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(255 BYTE)")]
 		public string DATATYPE { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(512 BYTE)")]
 		public string DATAVALUE { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(36 BYTE)")]
 		public string EXPORTIMPORTKEY { get; set; }
 
-		[JsonProperty]
 		public uint? ISFROZEN { get; set; }
 
 	}

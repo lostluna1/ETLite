@@ -1,0 +1,49 @@
+﻿using FreeSql.DatabaseModel;using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using FreeSql.DataAnnotations;
+
+namespace ETLiteAPI.Models.DBFirstEntities {
+
+	
+	public partial class RP_SUB_MATERIAL {
+
+		public string CONTAINERNAME { get; set; }
+
+		public DateTime? CREATION_DATE { get; set; }
+
+		public string FG_MFGORDER_NAME { get; set; }
+
+		public string MATERIAL_BARCODE { get; set; }
+
+		public DateTime? MATERIAL_DATE { get; set; }
+
+		public string MATERIAL_PRODUCT_NAME { get; set; }
+
+		public decimal? MATERIAL_QTY { get; set; }
+
+		public string MATERIAL_UOM { get; set; }
+
+		public string MATERIL_CONTAINER_ID { get; set; }
+
+		public string SUB_CONTAINER_ID { get; set; }
+
+		public string SUB_MFG_LINE { get; set; }
+
+		public string SUB_MFGORDER_NAME { get; set; }
+
+		public string SUB_PRODUCT_DESC { get; set; }
+
+		public string SUB_PRODUCT_NAME { get; set; }
+
+		public string SUB_RFID { get; set; }
+
+		public string SUB_RFID_ID { get; set; }
+
+	}
+
+}

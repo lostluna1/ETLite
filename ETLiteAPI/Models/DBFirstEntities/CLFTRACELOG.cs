@@ -7,18 +7,15 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(DisableSyncStructure = true)]
+	
 	public partial class CLFTRACELOG {
 
-		[JsonProperty, Column(DbType = "VARCHAR2(255 BYTE)")]
 		public string CLFID { get; set; }
 
-		[JsonProperty]
 		public DateTime? LOGDATE { get; set; }
 
-		[JsonProperty, Column(DbType = "CLOB")]
 		public string LOGMESSAGE { get; set; }
 
 	}

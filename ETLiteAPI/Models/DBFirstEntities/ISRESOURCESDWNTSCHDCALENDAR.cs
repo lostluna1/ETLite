@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(Name = "ISRESOURCESDWNTSCHD_CALENDAR", DisableSyncStructure = true)]
+	
 	public partial class ISRESOURCESDWNTSCHDCALENDAR {
 
 		[JsonProperty, Column(DbType = "DATE(7)")]

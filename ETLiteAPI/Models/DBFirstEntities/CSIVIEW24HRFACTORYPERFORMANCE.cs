@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(Name = "CSIVIEW_24HRFACTORYPERFORMANCE", DisableSyncStructure = true)]
+	
 	public partial class CSIVIEW24HRFACTORYPERFORMANCE {
 
 		[JsonProperty, Column(DbType = "CHAR(16 BYTE)")]

@@ -7,21 +7,17 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(DisableSyncStructure = true)]
+	
 	public partial class DBIDCONFIGURATION {
 
-		[JsonProperty, Column(IsPrimary = true)]
 		public uint IDCOLUMN { get; set; }
 
-		[JsonProperty]
 		public uint? ESTIMATEDNUMBEROFSITES { get; set; }
 
-		[JsonProperty]
 		public uint? NUMBEROFBITSUSED { get; set; }
 
-		[JsonProperty]
 		public uint? WARNINGRANGE { get; set; }
 
 	}

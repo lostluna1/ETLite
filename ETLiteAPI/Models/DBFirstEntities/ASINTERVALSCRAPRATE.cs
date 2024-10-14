@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(Name = "AS_INTERVALSCRAPRATE", DisableSyncStructure = true)]
+	
 	public partial class ASINTERVALSCRAPRATE {
 
 		[JsonProperty, Column(DbType = "CHAR(0 BYTE)")]

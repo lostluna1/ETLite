@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(Name = "SYS_DICTIONARYLIST", DisableSyncStructure = true)]
+	
 	public partial class SYSDICTIONARYLIST {
 
 		[JsonProperty, Column(Name = "DICLIST_ID", IsPrimary = true)]

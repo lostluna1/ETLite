@@ -7,30 +7,23 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(DisableSyncStructure = true)]
+	
 	public partial class QUERYDEF {
 
-		[JsonProperty]
 		public uint? DATASOURCENAMEID { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(255 BYTE)")]
 		public string DESCRIPTION { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(255 BYTE)")]
 		public string NAME { get; set; }
 
-		[JsonProperty]
 		public uint? QUERYCATEGORYID { get; set; }
 
-		[JsonProperty]
 		public uint? QUERYDEFID { get; set; }
 
-		[JsonProperty]
 		public uint? QUERYTYPEID { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(5 BYTE)")]
 		public string WORKSPACECODE { get; set; }
 
 	}

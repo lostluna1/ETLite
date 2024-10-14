@@ -7,18 +7,15 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(DisableSyncStructure = true)]
+	
 	public partial class ISOEEERRORLOG {
 
-		[JsonProperty, Column(Name = "CREATION_DATETIME", DbType = "DATE(7)", InsertValueSql = "sysdate")]
-		public DateTime CREATIONDATETIME { get; set; }
+		public DateTime CREATION_DATETIME { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(4000 BYTE)")]
 		public string ERRMSG { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(255 BYTE)")]
 		public string PROGID { get; set; }
 
 	}

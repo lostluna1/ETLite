@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(Name = "SYS_ROLEAUTHDATA", DisableSyncStructure = true)]
+	
 	public partial class SYSROLEAUTHDATA {
 
 		[JsonProperty, Column(Name = "AUTH_ID", IsPrimary = true)]

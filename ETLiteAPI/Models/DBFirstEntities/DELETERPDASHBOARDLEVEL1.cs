@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(Name = "DELETE_RP_DASHBOARD_LEVEL1", DisableSyncStructure = true)]
+	
 	public partial class DELETERPDASHBOARDLEVEL1 {
 
 		[JsonProperty, Column(DbType = "UNDEFINED(0)")]

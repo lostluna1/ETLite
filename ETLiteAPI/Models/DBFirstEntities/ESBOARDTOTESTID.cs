@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(Name = "ES_BOARDTOTESTID", DisableSyncStructure = true)]
+	
 	public partial class ESBOARDTOTESTID {
 
 		[JsonProperty, Column(Name = "ES_BOARDTOTESTID", DbType = "CHAR(16 BYTE)", IsPrimary = true, IsNullable = false)]
-		public string EsBOARDTOTESTID { get; set; }
+		public string ES_BOARDTOTESTID { get; set; }
 
 		[JsonProperty]
 		public uint? CDOTYPEID { get; set; }

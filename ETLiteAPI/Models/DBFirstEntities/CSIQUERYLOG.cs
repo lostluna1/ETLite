@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(Name = "CSI_QUERY_LOG", DisableSyncStructure = true)]
+	
 	public partial class CSIQUERYLOG {
 
 		[JsonProperty, Column(Name = "LOG_DATE", InsertValueSql = "SYSDATE")]

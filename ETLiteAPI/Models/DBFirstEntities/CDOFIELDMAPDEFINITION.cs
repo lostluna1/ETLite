@@ -7,33 +7,25 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(DisableSyncStructure = true)]
+	
 	public partial class CDOFIELDMAPDEFINITION {
 
-		[JsonProperty]
 		public bool? ACCUMULATE { get; set; }
 
-		[JsonProperty]
 		public bool? CARRYFORWARD { get; set; }
 
-		[JsonProperty]
 		public uint? CDOFIELDMAPID { get; set; }
 
-		[JsonProperty]
 		public uint? CDOMAPID { get; set; }
 
-		[JsonProperty]
 		public bool? ISDISABLED { get; set; }
 
-		[JsonProperty]
 		public uint? SOURCECDOFIELDID { get; set; }
 
-		[JsonProperty]
 		public uint? TARGETCDOFIELDID { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(5 BYTE)")]
 		public string WORKSPACECODE { get; set; }
 
 	}

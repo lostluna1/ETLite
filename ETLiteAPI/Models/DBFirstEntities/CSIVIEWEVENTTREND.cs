@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(Name = "CSIVIEW_EVENTTREND", DisableSyncStructure = true)]
+	
 	public partial class CSIVIEWEVENTTREND {
 
 		[JsonProperty, Column(DbType = "DATE(7)")]

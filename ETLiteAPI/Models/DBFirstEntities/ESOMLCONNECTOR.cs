@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(Name = "ES_OMLCONNECTOR", DisableSyncStructure = true)]
+	
 	public partial class ESOMLCONNECTOR {
 
 		[JsonProperty, Column(Name = "ES_OMLCONNECTORID", DbType = "CHAR(16 BYTE)", IsPrimary = true, IsNullable = false)]
@@ -31,7 +31,7 @@ namespace ETLiteAPI.Models {
 		public uint? ESLOGCIOERRORFILES { get; set; }
 
 		[JsonProperty, Column(Name = "ES_OMLCONNECTOR", DbType = "VARCHAR2(40 BYTE)")]
-		public string EsOMLCONNECTOR { get; set; }
+		public string ES_OMLCONNECTOR { get; set; }
 
 		[JsonProperty, Column(Name = "ES_OMLCONNECTORLISTID", DbType = "CHAR(16 BYTE)")]
 		public string ESOMLCONNECTORLISTID { get; set; }

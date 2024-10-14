@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(Name = "AS_JOBORDERVIEW", DisableSyncStructure = true)]
+	
 	public partial class ASJOBORDERVIEW {
 
 		[JsonProperty, Column(Name = "BIZ_EQUIPREPAIREXPENSETYPENAME", DbType = "VARCHAR2(256 BYTE)")]

@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(Name = "KANBAN_QUALITYEFFICIENCY_TEMP", DisableSyncStructure = true)]
+	
 	public partial class KANBANQUALITYEFFICIENCYTEMP {
 
 		[JsonProperty, Column(Name = "BIZ_BUNAME", StringLength = 50)]

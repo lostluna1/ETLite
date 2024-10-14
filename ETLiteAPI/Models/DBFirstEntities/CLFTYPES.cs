@@ -7,18 +7,15 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(DisableSyncStructure = true)]
+	
 	public partial class CLFTYPES {
 
-		[JsonProperty, Column(IsPrimary = true)]
 		public uint CLFTYPEID { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(50 BYTE)")]
 		public string DESCRIPTION { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(255 BYTE)")]
 		public string NAME { get; set; }
 
 	}

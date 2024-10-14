@@ -7,27 +7,21 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(DisableSyncStructure = true)]
+	
 	public partial class CLFFUNCTIONS {
 
-		[JsonProperty]
 		public uint? CLFFUNCTIONID { get; set; }
 
-		[JsonProperty]
 		public uint? CLFID { get; set; }
 
-		[JsonProperty]
 		public uint? FUNCTIONID { get; set; }
 
-		[JsonProperty]
 		public bool? ISACTIVE { get; set; }
 
-		[JsonProperty]
 		public uint? SEQUENCE { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(5 BYTE)")]
 		public string WORKSPACECODE { get; set; }
 
 	}

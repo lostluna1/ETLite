@@ -7,15 +7,13 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(DisableSyncStructure = true)]
+	
 	public partial class DOCCONTENTS {
 
-		[JsonProperty, Column(DbType = "BLOB")]
 		public byte[] DOCCONTENT { get; set; }
 
-		[JsonProperty]
 		public uint? DOCCONTENTSID { get; set; }
 
 	}

@@ -7,27 +7,21 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(DisableSyncStructure = true)]
+	
 	public partial class DBCATEGORIES {
 
-		[JsonProperty, Column(IsPrimary = true)]
 		public uint DBCATEGORYID { get; set; }
 
-		[JsonProperty]
 		public uint? DATASOURCENAMEID { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(255 BYTE)")]
 		public string DBCATEGORYDESCRIPTION { get; set; }
 
-		[JsonProperty]
 		public bool? EXPOSEDTOSTORAGE { get; set; }
 
-		[JsonProperty]
 		public bool? EXPOSEDTOTABLE { get; set; }
 
-		[JsonProperty]
 		public bool? PROPAGATE { get; set; }
 
 	}

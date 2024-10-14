@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(Name = "RP_EQPT_LIFETIME", DisableSyncStructure = true)]
+	
 	public partial class RPEQPTLIFETIME {
 
 		[JsonProperty, Column(Name = "BIZ_LIFETIMELIMIT")]

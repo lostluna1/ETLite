@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(Name = "ES_CADLAYERS", DisableSyncStructure = true)]
+	
 	public partial class ESCADLAYERS {
 
 		[JsonProperty, Column(Name = "ES_CADLAYERSID", DbType = "CHAR(16 BYTE)", IsPrimary = true, IsNullable = false)]

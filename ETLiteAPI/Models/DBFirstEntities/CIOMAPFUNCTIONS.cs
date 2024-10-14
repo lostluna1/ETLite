@@ -7,42 +7,31 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(DisableSyncStructure = true)]
+	
 	public partial class CIOMAPFUNCTIONS {
 
-		[JsonProperty, Column(DbType = "CHAR(16 BYTE)", IsPrimary = true, IsNullable = false)]
 		public string CIOMAPFUNCTIONSID { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(2000 BYTE)")]
 		public string ARGUMENTS { get; set; }
 
-		[JsonProperty]
 		public uint? CDOTYPEID { get; set; }
 
-		[JsonProperty]
 		public uint? CHANGECOUNT { get; set; }
 
-		[JsonProperty, Column(DbType = "CHAR(16 BYTE)")]
 		public string CIOFUNCTIONID { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(30 BYTE)")]
 		public string CIOMAPFUNCTIONSNAME { get; set; }
 
-		[JsonProperty, Column(DbType = "CHAR(16 BYTE)")]
 		public string CIOMESSAGEMAPID { get; set; }
 
-		[JsonProperty, Column(DbType = "VARCHAR2(36 BYTE)")]
 		public string EXPORTIMPORTKEY { get; set; }
 
-		[JsonProperty]
 		public uint? ISFROZEN { get; set; }
 
-		[JsonProperty]
 		public uint? LEFTPOSITION { get; set; }
 
-		[JsonProperty]
 		public uint? TOPPOSITION { get; set; }
 
 	}

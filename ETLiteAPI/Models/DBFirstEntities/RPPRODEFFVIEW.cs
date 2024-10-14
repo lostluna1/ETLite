@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(Name = "RP_PRODEFFVIEW", DisableSyncStructure = true)]
+	
 	public partial class RPPRODEFFVIEW {
 
 		[JsonProperty, Column(Name = "ACTIVATION_RATE", DbType = "NUMBER(22)")]

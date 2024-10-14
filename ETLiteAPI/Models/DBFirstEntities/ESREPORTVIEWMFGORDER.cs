@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(Name = "ES_REPORTVIEW_MFGORDER", DisableSyncStructure = true)]
+	
 	public partial class ESREPORTVIEWMFGORDER {
 
 		[JsonProperty, Column(DbType = "NUMBER(22)")]

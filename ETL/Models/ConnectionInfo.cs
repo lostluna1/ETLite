@@ -1,31 +1,26 @@
-﻿namespace ETL.Models;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-public class ConnectionInfo
+namespace ETL.Models;
+
+public partial class ConnectionInfo : ObservableValidator
 {
-    public string? ConnectionName
-    {
-        get; set;
-    }
-    public string? DatabaseType
-    {
-        get; set;
-    }
-    public string? ServerAddress
-    {
-        get; set;
-    }
-    public string? DatabaseName
-    {
-        get; set;
-    }
-    public string? Username
-    {
-        get; set;
-    }
-    public string? Password
-    {
-        get; set;
-    }
+    [ObservableProperty]
+    private string? connectionName;
+
+    [ObservableProperty]
+    private string? databaseType;
+
+    [ObservableProperty]
+    private string? serverAddress;
+
+    [ObservableProperty]
+    private string? databaseName;
+
+    [ObservableProperty]
+    private string? username;
+
+    [ObservableProperty]
+    private string? password;
 
     public override bool Equals(object? obj)
     {

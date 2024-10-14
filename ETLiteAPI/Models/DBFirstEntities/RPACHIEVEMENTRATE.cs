@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(Name = "RP_ACHIEVEMENT_RATE", DisableSyncStructure = true)]
+	
 	public partial class RPACHIEVEMENTRATE {
 
 		[JsonProperty, Column(DbType = "NUMBER(22)")]

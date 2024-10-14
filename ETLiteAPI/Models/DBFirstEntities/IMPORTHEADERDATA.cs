@@ -7,21 +7,17 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 
-namespace ETLiteAPI.Models {
+namespace ETLiteAPI.Models.DBFirstEntities {
 
-	[JsonObject(MemberSerialization.OptIn), Table(DisableSyncStructure = true)]
+	
 	public partial class IMPORTHEADERDATA {
 
-		[JsonProperty, Column(IsPrimary = true)]
 		public uint IMPORTHEADERID { get; set; }
 
-		[JsonProperty]
 		public uint? IMPORTACTIONIFMODIFIED { get; set; }
 
-		[JsonProperty]
 		public uint? IMPORTIFEXISTS { get; set; }
 
-		[JsonProperty]
 		public uint? IMPORTSETHEADERID { get; set; }
 
 	}
