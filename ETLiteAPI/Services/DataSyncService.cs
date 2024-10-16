@@ -1,6 +1,5 @@
 using System.Reflection;
 using ETLiteAPI.Models;
-using ETLiteAPI.Models.DBFirstEntities;
 using FreeSql;
 using FreeSql.DatabaseModel;
 using FreeSql.Internal.Model;
