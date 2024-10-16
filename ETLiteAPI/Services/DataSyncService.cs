@@ -21,7 +21,15 @@ public class DataSyncService : IDataSyncService
         _configuration = configuration;
         _logger = logger;
     }
-    public dynamic SyncData(ConnectionInfo sourceInfo, ConnectionInfo targetInfo, string tableName,string sql)
+    /// <summary>
+    /// 数据同步,tableName算是目标表名，sql是源数据库查询语句
+    /// </summary>
+    /// <param name="sourceInfo"></param> 
+    /// <param name="targetInfo"></param>
+    /// <param name="tableName"></param>
+    /// <param name="sql"></param>
+    /// <returns></returns>
+    public dynamic SyncData(ConnectionInfo sourceInfo, ConnectionInfo targetInfo, string tableName, string sql)
     {
         try
         {
@@ -45,35 +53,30 @@ public class DataSyncService : IDataSyncService
 
             _logger.LogInformation("目标数据库连接字符串: {ConnectionString}", targetConnectionString);
 
-            // 获取指定表的列信息
-            var sourceTable = sourceFsql.DbFirst.GetTableByName(tableName);
-            if (sourceTable == null)
-            {
-                throw new Exception($"源数据库中不存在表: {tableName}");
-            }
+            // 查询源数据库中的数据
+            var sourceData = sourceFsql.Ado.Query<Dictionary<string, object>>(sql);
 
-            _logger.LogInformation("成功获取源数据库表信息: {TableName}", tableName);
+            _logger.LogInformation("成功查询源数据库中的数据: {TableName}", tableName);
+
+            if (sourceData.Count == 0)
+            {
+                throw new Exception("查询结果为空，无法同步数据");
+            }
 
             // 动态创建实体类型
             var dynamicEntityBuilder = targetFsql.CodeFirst.DynamicEntity(tableName, new TableAttribute { Name = tableName });
-            foreach (var column in sourceTable.Columns)
+            foreach (var key in sourceData[0].Keys)
             {
-                dynamicEntityBuilder.Property(column.Name, column.CsType, new ColumnAttribute
+                var value = sourceData[0][key];
+                var type = value?.GetType() ?? typeof(string); // 如果值为 null，默认类型为 string
+                dynamicEntityBuilder.Property(key, type, new ColumnAttribute
                 {
-                    IsIdentity = column.IsIdentity,
-                    IsPrimary = column.IsPrimary,
-                    StringLength = column.MaxLength,
-                    IsNullable = !column.IsPrimary // 保留源数据库表的字段设置，主键字段不允许为空，其他字段允许为空
+                    IsNullable = true // 默认所有字段允许为空
                 });
             }
             var dynamicEntity = dynamicEntityBuilder.Build();
 
             // 如果有必要，请将 dynamicEntity 缓存起来
-
-            // 查询源数据库中的数据
-            var sourceData = sourceFsql.Ado.Query<Dictionary<string, object>>(sql);
-
-            _logger.LogInformation("成功查询源数据库中的数据: {TableName}", tableName);
 
             // 同步目标数据库表结构
             targetFsql.CodeFirst.SyncStructure(dynamicEntity.Type);
@@ -81,15 +84,6 @@ public class DataSyncService : IDataSyncService
             // 将数据插入到目标表中
             foreach (var item in sourceData)
             {
-                // 检查并处理 NULL 值
-                foreach (var column in sourceTable.Columns)
-                {
-                    if (column.IsPrimary && item[column.Name] == null)
-                    {
-                        throw new Exception($"字段 {column.Name} 不允许为 NULL");
-                    }
-                }
-
                 var obj = dynamicEntity.CreateInstance(item);
                 targetFsql.Insert<object>().AsType(dynamicEntity.Type).AppendData(obj).ExecuteAffrows();
             }
@@ -103,6 +97,7 @@ public class DataSyncService : IDataSyncService
             throw;
         }
     }
+
 
 
 
