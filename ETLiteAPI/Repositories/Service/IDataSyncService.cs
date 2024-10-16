@@ -3,5 +3,6 @@ using ConnectionInfo = ETLiteAPI.Models.ConnectionInfo;
 
 public interface IDataSyncService
 {
-    public dynamic SyncData<T>(ConnectionInfo sourceInfo, ConnectionInfo targetInfo, string sql) where T : class, new();
+    //public string GetTableDataAsJson(ConnectionInfo sourceInfo, string tableName);
+    public dynamic SyncData(ConnectionInfo sourceInfo, ConnectionInfo targetInfo, string tableName, string sql);
 }

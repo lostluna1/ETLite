@@ -1,4 +1,3 @@
-using System.Reflection.Emit;
 using System.Reflection;
 using ETLiteAPI.Models;
 using ETLiteAPI.Models.DBFirstEntities;
@@ -7,6 +6,10 @@ using FreeSql.DatabaseModel;
 using FreeSql.Internal.Model;
 using Microsoft.Extensions.Logging;
 using ConnectionInfo = ETLiteAPI.Models.ConnectionInfo;
+using FreeSql.Extensions.ZeroEntity;
+using static FreeSql.Extensions.ZeroEntity.TableDescriptor;
+using Newtonsoft.Json;
+using FreeSql.DataAnnotations;
 
 namespace ETLiteAPI.Services;
 public class DataSyncService : IDataSyncService
@@ -19,102 +22,139 @@ public class DataSyncService : IDataSyncService
         _configuration = configuration;
         _logger = logger;
     }
-    public dynamic SyncData<T>(ConnectionInfo sourceInfo, ConnectionInfo targetInfo, string sql) where T : class, new()
+    public dynamic SyncData(ConnectionInfo sourceInfo, ConnectionInfo targetInfo, string tableName,string sql)
     {
-        var sourceConnectionString = BuildConnectionString(sourceInfo);
-        var targetConnectionString = BuildConnectionString(targetInfo);
+        try
+        {
+            _logger.LogInformation("开始数据同步，源数据库表名: {TableName}", tableName);
 
-        var sourceDb = new FreeSqlBuilder()
-            .UseConnectionString(GetDataType(sourceInfo.DatabaseType), sourceConnectionString)
-            .Build();
+            // 建立源数据库连接
+            var sourceConnectionString = BuildConnectionString(sourceInfo);
+            var sourceDataType = GetDataType(sourceInfo.DatabaseType);
+            var sourceFsql = new FreeSqlBuilder()
+                .UseConnectionString(sourceDataType, sourceConnectionString)
+                .Build();
 
-        var targetDb = new FreeSqlBuilder()
-            .UseConnectionString(GetDataType(targetInfo.DatabaseType), targetConnectionString)
-            .Build();
+            _logger.LogInformation("源数据库连接字符串: {ConnectionString}", sourceConnectionString);
 
-        // 从源数据库读取数据
-        var sourceData = sourceDb.Select<T>().WithSql(sql).ToList();
+            // 建立目标数据库连接
+            var targetConnectionString = BuildConnectionString(targetInfo);
+            var targetDataType = GetDataType(targetInfo.DatabaseType);
+            var targetFsql = new FreeSqlBuilder()
+                .UseConnectionString(targetDataType, targetConnectionString)
+                .Build();
 
-        // 同步目标数据库中的表结构
-        targetDb.CodeFirst.IsAutoSyncStructure = true; // 启用自动同步
-        targetDb.CodeFirst.SyncStructure<T>();
+            _logger.LogInformation("目标数据库连接字符串: {ConnectionString}", targetConnectionString);
 
-        // 清空目标数据库中的表
-        targetDb.Delete<T>().Where("1=1").ExecuteAffrows();
+            // 获取指定表的列信息
+            var sourceTable = sourceFsql.DbFirst.GetTableByName(tableName);
+            if (sourceTable == null)
+            {
+                throw new Exception($"源数据库中不存在表: {tableName}");
+            }
 
-        // 将数据插入到目标数据库
-        targetDb.Insert<T>(sourceData).ExecuteAffrows();
+            _logger.LogInformation("成功获取源数据库表信息: {TableName}", tableName);
 
-        return null;
+            // 动态创建实体类型
+            var dynamicEntityBuilder = targetFsql.CodeFirst.DynamicEntity(tableName, new TableAttribute { Name = tableName });
+            foreach (var column in sourceTable.Columns)
+            {
+                dynamicEntityBuilder.Property(column.Name, column.CsType, new ColumnAttribute
+                {
+                    IsIdentity = column.IsIdentity,
+                    IsPrimary = column.IsPrimary,
+                    StringLength = column.MaxLength,
+                    IsNullable = !column.IsPrimary // 保留源数据库表的字段设置，主键字段不允许为空，其他字段允许为空
+                });
+            }
+            var dynamicEntity = dynamicEntityBuilder.Build();
+
+            // 如果有必要，请将 dynamicEntity 缓存起来
+
+            // 查询源数据库中的数据
+            var sourceData = sourceFsql.Ado.Query<Dictionary<string, object>>(sql);
+
+            _logger.LogInformation("成功查询源数据库中的数据: {TableName}", tableName);
+
+            // 同步目标数据库表结构
+            targetFsql.CodeFirst.SyncStructure(dynamicEntity.Type);
+
+            // 将数据插入到目标表中
+            foreach (var item in sourceData)
+            {
+                // 检查并处理 NULL 值
+                foreach (var column in sourceTable.Columns)
+                {
+                    if (column.IsPrimary && item[column.Name] == null)
+                    {
+                        throw new Exception($"字段 {column.Name} 不允许为 NULL");
+                    }
+                }
+
+                var obj = dynamicEntity.CreateInstance(item);
+                targetFsql.Insert<object>().AsType(dynamicEntity.Type).AppendData(obj).ExecuteAffrows();
+            }
+
+            _logger.LogInformation("数据同步完成: {TableName}", tableName);
+            return "数据同步完成";
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "数据同步过程中发生错误");
+            throw;
+        }
     }
 
 
-    private object ConvertToEntity(Dictionary<string, object> row, DbTableInfo tableInfo)
-    {
-        var entityType = CreateDynamicType(tableInfo);
-        var entity = Activator.CreateInstance(entityType);
 
-        foreach (var kvp in row)
+    /*    public dynamic SyncData(ConnectionInfo sourceInfo, ConnectionInfo targetInfo, string sql)
         {
-            var property = entityType.GetProperty(kvp.Key);
-            if (property != null)
+            try
             {
-                var value = kvp.Value == DBNull.Value ? null : Convert.ChangeType(kvp.Value, property.PropertyType);
-                property.SetValue(entity, value);
+                // 建立源数据库连接
+                var sourceConnectionString = BuildConnectionString(sourceInfo);
+                var sourceDataType = GetDataType(sourceInfo.DatabaseType);
+                var sourceFsql = new FreeSqlBuilder()
+                    .UseConnectionString(sourceDataType, sourceConnectionString)
+                    .Build();
+
+                // 建立目标数据库连接
+                var targetConnectionString = BuildConnectionString(targetInfo);
+                var targetDataType = GetDataType(targetInfo.DatabaseType);
+                var targetFsql = new FreeSqlBuilder()
+                    .UseConnectionString(targetDataType, targetConnectionString)
+                    .Build();
+
+                //v3.2.695 emit 动态创建实体类型
+                var table = targetFsql.CodeFirst.DynamicEntity("user", new TableAttribute { Name = "User" })
+                    .Property("id", typeof(int), new ColumnAttribute { IsIdentity = true, IsPrimary = true })
+                    .Property("Name", typeof(string), new ColumnAttribute { StringLength = 32 })
+                    .Build();
+
+                //如果有必要，请将 table 缓存起来
+
+                Dictionary<string, object> dict = new Dictionary<string, object>();
+                dict["id"] = 1;
+                dict["Name"] = "xxx";
+                targetFsql.CodeFirst.SyncStructure(table.Type);
+                //将字典转化成 type 对应的 object
+                object obj = table.CreateInstance(dict);
+
+                //插入
+                targetFsql.Insert<object>().AsType(table.Type).AppendData(obj).ExecuteAffrows();
+
+
+                //等等...
+
+                return "数据同步完成";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "数据同步过程中发生错误");
+                throw;
             }
         }
-
-        return entity;
-    }
-
-
-    private Type CreateDynamicType(DbTableInfo tableInfo)
-    {
-        var typeBuilder = GetTypeBuilder(tableInfo.Name);
-
-        foreach (var column in tableInfo.Columns)
-        {
-            CreateProperty(typeBuilder, column.Name, column.CsType);
-        }
-
-        return typeBuilder.CreateType();
-    }
-
-    private TypeBuilder GetTypeBuilder(string typeName)
-    {
-        var assemblyName = new AssemblyName(typeName);
-        var assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
-        var moduleBuilder = assemblyBuilder.DefineDynamicModule("MainModule");
-        var typeBuilder = moduleBuilder.DefineType(typeName, TypeAttributes.Public | TypeAttributes.Class);
-
-        return typeBuilder;
-    }
-
-    private void CreateProperty(TypeBuilder typeBuilder, string propertyName, Type propertyType)
-    {
-        var fieldBuilder = typeBuilder.DefineField("_" + propertyName, propertyType, FieldAttributes.Private);
-        var propertyBuilder = typeBuilder.DefineProperty(propertyName, PropertyAttributes.HasDefault, propertyType, null);
-
-        var getMethodBuilder = typeBuilder.DefineMethod("get_" + propertyName, MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig, propertyType, Type.EmptyTypes);
-        var getIL = getMethodBuilder.GetILGenerator();
-        getIL.Emit(OpCodes.Ldarg_0);
-        getIL.Emit(OpCodes.Ldfld, fieldBuilder);
-        getIL.Emit(OpCodes.Ret);
-
-        var setMethodBuilder = typeBuilder.DefineMethod("set_" + propertyName, MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig, null, new[] { propertyType });
-        var setIL = setMethodBuilder.GetILGenerator();
-        setIL.Emit(OpCodes.Ldarg_0);
-        setIL.Emit(OpCodes.Ldarg_1);
-        setIL.Emit(OpCodes.Stfld, fieldBuilder);
-        setIL.Emit(OpCodes.Ret);
-
-        propertyBuilder.SetGetMethod(getMethodBuilder);
-        propertyBuilder.SetSetMethod(setMethodBuilder);
-    }
-
-
-
-
+    */
 
 
     private string BuildConnectionString(ConnectionInfo info)

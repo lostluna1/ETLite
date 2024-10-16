@@ -21,36 +21,14 @@ public class DataSyncController : ControllerBase
     [HttpPost("sync")]
     public IActionResult SyncData([FromBody] SyncRequest request)
     {
-        var entityType = GetTypeByName(request.TableName);
-        if (entityType == null)
-        {
-            return BadRequest("Invalid table name.");
-        }
+        //_dataSyncService.GetTableDataAsJson(request.SourceInfo, "PRODUCTBASE");
 
-        // 使用反射调用泛型方法
-        var method = typeof(IDataSyncService).GetMethod("SyncData")?.MakeGenericMethod(entityType);
-        method?.Invoke(_dataSyncService, new object[] { request.SourceInfo, request.TargetInfo, request.Sql });
-
+        //_dataSyncService.SyncData(request.SourceInfo, request.TargetInfo,request.Sql);
+        _dataSyncService.SyncData(request.SourceInfo, request.TargetInfo, request.tableName, request.Sql);
         return Ok();
     }
-
-    private Type GetTypeByName(string typeName)
-    {
-        var assemblies = AppDomain.CurrentDomain.GetAssemblies();
-        foreach (var assembly in assemblies)
-        {
-            var types = assembly.GetTypes();
-            foreach (var type in types)
-            {
-                if (type.Name == typeName || type.FullName == typeName)
-                {
-                    return type;
-                }
-            }
-        }
-        return null;
-    }
 }
+
 
 public class SyncRequest
 {
@@ -62,7 +40,7 @@ public class SyncRequest
     {
         get; set;
     }
-    public string TableName
+    public string tableName
     {
         get; set;
     }
