@@ -3,6 +3,7 @@ using ETLiteAPI.Services;
 using FreeSql;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +37,7 @@ builder.Services.AddSingleton<IDictionary<string, IFreeSql>>(provider =>
             var connectionString = Connector.BuildConnectionString(connection.Value);
             var dataType = Connector.GetDataType(connection.Value.DatabaseType);
             var freeSql = new FreeSqlBuilder()
+            .UseMonitorCommand(cmd => Debug.WriteLine($"Sql£º{cmd.CommandText}"))
                 .UseConnectionString(dataType, connectionString)
                 .Build();
             freeSqlInstances[connection.Key] = freeSql;

@@ -70,15 +70,11 @@ public class DataSyncService(/*IConfiguration configuration,*/ ILogger<DataSyncS
 
             // 将数据插入到目标表中，按主键更新插入
             var rowsAffected = 0;
-            foreach (var item in sourceData)
-            {
-                var obj = dynamicEntity.CreateInstance(item);
+            var batchInsertOrUpdate = targetFsql.InsertOrUpdate<object>()
+                .AsType(dynamicEntity.Type)
+                .SetSource(sourceData.Select(item => dynamicEntity.CreateInstance(item)).ToList());
 
-                rowsAffected += targetFsql.InsertOrUpdate<object>()
-                    .AsType(dynamicEntity.Type)
-                    .SetSource(obj)
-                    .ExecuteAffrows();
-            }
+            rowsAffected = batchInsertOrUpdate.ExecuteAffrows();// 批量更新插入
 
             _logger.LogInformation("数据同步完成: {TableName}", tableName);
             return new ResultModels
@@ -99,6 +95,7 @@ public class DataSyncService(/*IConfiguration configuration,*/ ILogger<DataSyncS
             };
         }
     }
+
 
 
 
