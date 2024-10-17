@@ -205,7 +205,7 @@
     <value>WebContent</value>
   </data>
   <data name="WebView_FailedMessage.Text" xml:space="preserve">
-    <value>页面加载失败,请检查或重新打开该页面</value>
+    <value>页面加载失败,请检查或重新打开该页面.</value>
   </data>
   <data name="WebView_Loading.Text" xml:space="preserve">
     <value>加载中...</value>
@@ -215,5 +215,11 @@
   </data>
   <data name="Settings_Language.Text" xml:space="preserve">
     <value>语言设置</value>
+  </data>
+  <data name="Shell_Step1.Content" xml:space="preserve">
+    <value>第一步</value>
+  </data>
+  <data name="Shell_Step2.Content" xml:space="preserve">
+    <value>第二步</value>
   </data>
 </root>
