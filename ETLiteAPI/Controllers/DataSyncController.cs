@@ -1,9 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using ETLiteAPI.Models;
-using ETLiteAPI.Services;
-using ConnectionInfo = ETLiteAPI.Models.ConnectionInfo;
-using System;
-using System.Linq;
 
 namespace ETLiteAPI.Controllers;
 
@@ -21,23 +16,41 @@ public class DataSyncController : ControllerBase
     [HttpPost("sync")]
     public IActionResult SyncData([FromBody] SyncRequest request)
     {
-        _dataSyncService.SyncData(request.SourceInfo, request.TargetInfo, request.TableName, request.Sql, request.PrimaryKeys);
-        return Ok();
+        var result = _dataSyncService.SyncData(request.SourceConnName, request.TargetConnName, request.TableName, request.Sql, request.PrimaryKeys);
+
+        if (result.Code == 0)
+        {
+            return Ok(result);
+        }
+        else
+        {
+            return StatusCode(500, result); 
+        }
     }
 }
 
 
 
+
 public class SyncRequest
 {
-    public ConnectionInfo SourceInfo
+    public string SourceConnName
+    {
+        get;set;
+    }
+    
+    public string TargetConnName
+    {
+        get;set;
+    }
+    /*public ConnectionInfo SourceInfo
     {
         get; set;
     }
     public ConnectionInfo TargetInfo
     {
         get; set;
-    }
+    }*/
     public string TableName
     {
         get; set;

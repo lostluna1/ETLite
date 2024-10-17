@@ -1,10 +1,40 @@
+using ETLiteAPI.FreeSqlUtilities;
 using ETLiteAPI.Services;
+using FreeSql;
+using Microsoft.Extensions.Configuration;
+using System.Collections.Generic;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// 运行时生成配置文件
+var configurationBuilder = new ConfigurationBuilder()
+    .SetBasePath(AppContext.BaseDirectory) // 使用生成目录路径
+    .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+    .AddEnvironmentVariables();
+var configuration = configurationBuilder.Build();
+
+// 将生成的配置添加到服务容器中
+builder.Services.AddSingleton<IConfiguration>(configuration);
+
 // Add services to the container.
-builder.Services.AddSingleton<ETLiteAPI.Models.ConnectionInfo>();
-builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
+builder.Services.AddSingleton<IDictionary<string, IFreeSql>>(provider =>
+{
+    var config = provider.GetRequiredService<IConfiguration>();
+    var connections = config.GetSection("Connections").Get<Dictionary<string, ETLiteAPI.Models.ConnectionInfo>>();
+
+    var freeSqlInstances = new Dictionary<string, IFreeSql>();
+    foreach (var connection in connections)
+    {
+        var connectionString = Connector.BuildConnectionString(connection.Value);
+        var dataType = Connector.GetDataType(connection.Value.DatabaseType);
+        var freeSql = new FreeSqlBuilder()
+            .UseConnectionString(dataType, connectionString)
+            .Build();
+        freeSqlInstances[connection.Key] = freeSql;
+    }
+
+    return freeSqlInstances;
+});
 builder.Services.AddTransient<IDataSyncService, DataSyncService>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
