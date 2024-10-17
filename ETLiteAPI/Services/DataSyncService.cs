@@ -13,18 +13,11 @@ using System;
 using ETLiteAPI.FreeSqlUtilities;
 
 namespace ETLiteAPI.Services;
-public class DataSyncService : IDataSyncService
+public class DataSyncService(/*IConfiguration configuration,*/ ILogger<DataSyncService> logger, IDictionary<string, IFreeSql> freeSqlInstances) : IDataSyncService
 {
-    private readonly IConfiguration _configuration;
-    private readonly ILogger<DataSyncService> _logger;
-    private readonly IDictionary<string, IFreeSql> _freeSqlInstances;
-
-    public DataSyncService(IConfiguration configuration, ILogger<DataSyncService> logger, IDictionary<string, IFreeSql> freeSqlInstances)
-    {
-        _configuration = configuration;
-        _logger = logger;
-        _freeSqlInstances = freeSqlInstances;
-    }
+    //private readonly IConfiguration _configuration = configuration;
+    private readonly ILogger<DataSyncService> _logger = logger;
+    private readonly IDictionary<string, IFreeSql> _freeSqlInstances = freeSqlInstances;
 
     public ResultModels SyncData(string sourceConnName, string targetConnName, string tableName, string sql, List<string>? primaryKeys = null)
     {
@@ -83,7 +76,7 @@ public class DataSyncService : IDataSyncService
             targetFsql.CodeFirst.SyncStructure(dynamicEntity.Type);
 
             // 将数据插入到目标表中
-            int rowsAffected = 0;
+            var rowsAffected = 0;
             foreach (var item in sourceData)
             {
                 var obj = dynamicEntity.CreateInstance(item);

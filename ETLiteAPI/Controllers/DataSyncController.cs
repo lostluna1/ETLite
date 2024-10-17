@@ -31,31 +31,21 @@ public class DataSyncController : ControllerBase
 
 
 
-
 public class SyncRequest
 {
-    public string SourceConnName
-    {
-        get;set;
-    }
-    
-    public string TargetConnName
-    {
-        get;set;
-    }
-    /*public ConnectionInfo SourceInfo
+    public required string SourceConnName
     {
         get; set;
     }
-    public ConnectionInfo TargetInfo
-    {
-        get; set;
-    }*/
-    public string TableName
+    public required string TargetConnName
     {
         get; set;
     }
-    public string Sql
+    public required string TableName
+    {
+        get; set;
+    }
+    public required string Sql
     {
         get; set;
     }
