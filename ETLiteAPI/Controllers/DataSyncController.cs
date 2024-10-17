@@ -21,13 +21,11 @@ public class DataSyncController : ControllerBase
     [HttpPost("sync")]
     public IActionResult SyncData([FromBody] SyncRequest request)
     {
-        //_dataSyncService.GetTableDataAsJson(request.SourceInfo, "PRODUCTBASE");
-
-        //_dataSyncService.SyncData(request.SourceInfo, request.TargetInfo,request.Sql);
-        _dataSyncService.SyncData(request.SourceInfo, request.TargetInfo, request.tableName, request.Sql);
+        _dataSyncService.SyncData(request.SourceInfo, request.TargetInfo, request.TableName, request.Sql, request.PrimaryKeys);
         return Ok();
     }
 }
+
 
 
 public class SyncRequest
@@ -40,7 +38,7 @@ public class SyncRequest
     {
         get; set;
     }
-    public string tableName
+    public string TableName
     {
         get; set;
     }
@@ -48,4 +46,8 @@ public class SyncRequest
     {
         get; set;
     }
+    public List<string>? PrimaryKeys
+    {
+        get; set;
+    } // 新增的可选主键列表
 }

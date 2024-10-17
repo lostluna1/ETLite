@@ -24,12 +24,13 @@ public class DataSyncService : IDataSyncService
     /// <summary>
     /// 数据同步,tableName算是目标表名，sql是源数据库查询语句
     /// </summary>
-    /// <param name="sourceInfo"></param> 
+    /// <param name="sourceInfo"></param>
     /// <param name="targetInfo"></param>
     /// <param name="tableName"></param>
     /// <param name="sql"></param>
+    /// <param name="primaryKeys"></param>
     /// <returns></returns>
-    public dynamic SyncData(ConnectionInfo sourceInfo, ConnectionInfo targetInfo, string tableName, string sql)
+    public dynamic SyncData(ConnectionInfo sourceInfo, ConnectionInfo targetInfo, string tableName, string sql, List<string>? primaryKeys = null)
     {
         try
         {
@@ -53,7 +54,7 @@ public class DataSyncService : IDataSyncService
 
             _logger.LogInformation("目标数据库连接字符串: {ConnectionString}", targetConnectionString);
 
-            // 查询源数据库中的数据
+            // 无实体查询源数据库中的数据
             var sourceData = sourceFsql.Ado.Query<Dictionary<string, object>>(sql);
 
             _logger.LogInformation("成功查询源数据库中的数据: {TableName}", tableName);
@@ -71,7 +72,8 @@ public class DataSyncService : IDataSyncService
                 var type = value?.GetType() ?? typeof(string); // 如果值为 null，默认类型为 string
                 dynamicEntityBuilder.Property(key, type, new ColumnAttribute
                 {
-                    IsNullable = true // 默认所有字段允许为空
+                    IsNullable = true, // 默认所有字段允许为空
+                    IsPrimary = primaryKeys?.Contains(key) ?? false // 如果字段在主键列表中，则设置为主键
                 });
             }
             var dynamicEntity = dynamicEntityBuilder.Build();
@@ -97,6 +99,7 @@ public class DataSyncService : IDataSyncService
             throw;
         }
     }
+
 
 
 
