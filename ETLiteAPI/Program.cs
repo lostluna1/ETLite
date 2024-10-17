@@ -23,14 +23,27 @@ builder.Services.AddSingleton<IDictionary<string, IFreeSql>>(provider =>
     var connections = config.GetSection("Connections").Get<Dictionary<string, ETLiteAPI.Models.ConnectionInfo>>();
 
     var freeSqlInstances = new Dictionary<string, IFreeSql>();
+
+    if (connections == null)
+    {
+        throw new InvalidOperationException("未找到任何数据库连接配置。");
+    }
+
     foreach (var connection in connections)
     {
-        var connectionString = Connector.BuildConnectionString(connection.Value);
-        var dataType = Connector.GetDataType(connection.Value.DatabaseType);
-        var freeSql = new FreeSqlBuilder()
-            .UseConnectionString(dataType, connectionString)
-            .Build();
-        freeSqlInstances[connection.Key] = freeSql;
+        try
+        {
+            var connectionString = Connector.BuildConnectionString(connection.Value);
+            var dataType = Connector.GetDataType(connection.Value.DatabaseType);
+            var freeSql = new FreeSqlBuilder()
+                .UseConnectionString(dataType, connectionString)
+                .Build();
+            freeSqlInstances[connection.Key] = freeSql;
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException($"无法连接到数据库: {connection.Key}", ex);
+        }
     }
 
     return freeSqlInstances;

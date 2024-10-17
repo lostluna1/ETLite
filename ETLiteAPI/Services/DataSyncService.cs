@@ -46,25 +46,18 @@ public class DataSyncService(/*IConfiguration configuration,*/ ILogger<DataSyncS
 
             // 动态创建实体类型
             var dynamicEntityBuilder = targetFsql.CodeFirst.DynamicEntity(tableName, new TableAttribute { Name = tableName });
+
             foreach (var key in sourceData[0].Keys)
             {
                 var value = sourceData[0][key];
                 var type = value?.GetType() ?? typeof(string); // 如果值为 null，默认类型为 string
 
-                // 检查 primaryKeys 是否已经存在于目标表中
+                // 检查 primaryKeys 是否包含当前列
                 var isPrimaryKey = primaryKeys?.Contains(key) ?? false;
-                if (isPrimaryKey)
-                {
-                    var existingColumns = targetFsql.DbFirst.GetTableByName(tableName)?.Columns;
-                    if (existingColumns != null && existingColumns.Any(c => c.Name == key))
-                    {
-                        isPrimaryKey = false; // 如果已经存在，则不再设置为主键
-                    }
-                }
 
                 dynamicEntityBuilder.Property(key, type, new ColumnAttribute
                 {
-                    IsNullable = true,
+                    IsNullable = !isPrimaryKey, // 如果是主键，则不允许为 null
                     IsPrimary = isPrimaryKey
                 });
             }
@@ -75,12 +68,16 @@ public class DataSyncService(/*IConfiguration configuration,*/ ILogger<DataSyncS
             // 同步目标数据库表结构
             targetFsql.CodeFirst.SyncStructure(dynamicEntity.Type);
 
-            // 将数据插入到目标表中
+            // 将数据插入到目标表中，按主键更新插入
             var rowsAffected = 0;
             foreach (var item in sourceData)
             {
                 var obj = dynamicEntity.CreateInstance(item);
-                rowsAffected += targetFsql.Insert<object>().AsType(dynamicEntity.Type).AppendData(obj).ExecuteAffrows();
+
+                rowsAffected += targetFsql.InsertOrUpdate<object>()
+                    .AsType(dynamicEntity.Type)
+                    .SetSource(obj)
+                    .ExecuteAffrows();
             }
 
             _logger.LogInformation("数据同步完成: {TableName}", tableName);
@@ -102,6 +99,7 @@ public class DataSyncService(/*IConfiguration configuration,*/ ILogger<DataSyncS
             };
         }
     }
+
 
 
 }
