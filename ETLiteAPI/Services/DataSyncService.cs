@@ -11,6 +11,8 @@ using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
 using System;
 using ETLiteAPI.FreeSqlUtilities;
+using Hangfire;
+using Hangfire.Storage.Monitoring;
 
 namespace ETLiteAPI.Services;
 public class DataSyncService(/*IConfiguration configuration,*/ ILogger<DataSyncService> logger, IDictionary<string, IFreeSql> freeSqlInstances) : IDataSyncService
@@ -19,6 +21,8 @@ public class DataSyncService(/*IConfiguration configuration,*/ ILogger<DataSyncS
     private readonly ILogger<DataSyncService> _logger = logger;
     private readonly IDictionary<string, IFreeSql> _freeSqlInstances = freeSqlInstances;
 
+    [AutomaticRetry(Attempts = 3)] // 自动重试3次
+    [DisableConcurrentExecution(timeoutInSeconds: 300)] // 禁止并发执行，超时时间为300秒（5分钟）
     public ResultModels SyncData(string sourceConnName, string targetConnName, string tableName, string sql, List<string>? primaryKeys = null)
     {
         try
@@ -96,7 +100,62 @@ public class DataSyncService(/*IConfiguration configuration,*/ ILogger<DataSyncS
         }
     }
 
+    //public void ScheduleSyncData(string sourceConnName, string targetConnName, string tableName, string sql, List<string>? primaryKeys = null)
+    //{
+    //    RecurringJob.AddOrUpdate(() => SyncData(sourceConnName, targetConnName, tableName, sql, primaryKeys), "*/1 * * * *"); 
+    //}
+
+    public string ScheduleSyncData(string sourceConnName, string targetConnName, string tableName, string sql, List<string>? primaryKeys = null)
+    {
+        // 生成一个唯一的 jobId
+        var jobId = Guid.NewGuid().ToString();
+
+        // 使用生成的 jobId 创建或更新定时任务
+        RecurringJob.AddOrUpdate(jobId, () => SyncData(sourceConnName, targetConnName, tableName, sql, primaryKeys), "*/1 * * * *");
+
+        _logger.LogInformation("开始打印消息");
+
+        var jobDetails = GetJobDetails(jobId);
+        _logger.LogInformation("Job Details: JobId={JobId}, CreatedAt={CreatedAt}, State={State}, Properties={Properties}",
+            jobId, jobDetails.CreatedAt, jobDetails.State, JsonConvert.SerializeObject(jobDetails.Properties));
+
+        return jobId;
+    }
 
 
+    public ExtendedJobDetailsDto GetJobDetails(string jobId)
+    {
+        using var connection = JobStorage.Current.GetConnection();
+        var jobData = connection.GetJobData(jobId);
+        var stateData = connection.GetStateData(jobId);
+
+        if (jobData == null || stateData == null)
+        {
+            _logger.LogWarning("Job data or state data for jobId {JobId} is null.", jobId);
+            return new ExtendedJobDetailsDto
+            {
+                CreatedAt = null,
+                State = "Unknown",
+                Properties = new Dictionary<string, string>()
+            };
+        }
+
+        return new ExtendedJobDetailsDto
+        {
+            CreatedAt = jobData.CreatedAt,
+            State = stateData.Name,
+            Properties = stateData.Data
+        };
+    }
+
+
+
+    public class ExtendedJobDetailsDto : JobDetailsDto
+    {
+        public string State
+        {
+            get; set;
+        }
+    }
 
 }

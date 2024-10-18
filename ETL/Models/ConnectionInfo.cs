@@ -8,6 +8,9 @@ public partial class ConnectionInfo : ObservableValidator
     private string? connectionName;
 
     [ObservableProperty]
+    public string? id;
+
+    [ObservableProperty]
     private string? databaseType;
 
     [ObservableProperty]
@@ -25,6 +28,7 @@ public partial class ConnectionInfo : ObservableValidator
     public override bool Equals(object? obj)
     {
         return obj is ConnectionInfo info &&
+                Id == info.Id &&
                ConnectionName == info.ConnectionName &&
                DatabaseType == info.DatabaseType &&
                ServerAddress == info.ServerAddress &&
@@ -35,6 +39,6 @@ public partial class ConnectionInfo : ObservableValidator
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(ConnectionName, DatabaseType, ServerAddress, DatabaseName, Username, Password);
+        return HashCode.Combine(Id, ConnectionName, DatabaseType, ServerAddress, DatabaseName, Username, Password);
     }
 }

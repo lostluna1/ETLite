@@ -66,10 +66,10 @@ public partial class App : Application
             services.AddTransient<IActivationHandler, AppNotificationActivationHandler>();
 
             // Services
+            services.AddTransient<IWebViewService, WebViewService>();
             services.AddSingleton<IAppNotificationService, AppNotificationService>();
             services.AddSingleton<ILocalSettingsService, LocalSettingsService>();
             services.AddSingleton<IThemeSelectorService, ThemeSelectorService>();
-            services.AddTransient<IWebViewService, WebViewService>();
             services.AddTransient<INavigationViewService, NavigationViewService>();
 
             services.AddSingleton<IActivationService, ActivationService>();
@@ -80,6 +80,8 @@ public partial class App : Application
             services.AddSingleton<IFileService, FileService>();
 
             // Views and ViewModels
+            services.AddTransient<HangfireLogViewModel>();
+            services.AddTransient<HangfireLogPage>();
             services.AddTransient<Step2ViewModel>();
             services.AddTransient<Step2Page>();
             services.AddTransient<Step1ViewModel>();
@@ -88,8 +90,6 @@ public partial class App : Application
             services.AddTransient<DBConfigPage>();
             services.AddTransient<SettingsViewModel>();
             services.AddTransient<SettingsPage>();
-            services.AddTransient<WebContentViewModel>();
-            services.AddTransient<WebContentPage>();
             services.AddTransient<MainViewModel>();
             services.AddTransient<MainPage>();
             services.AddTransient<ShellPage>();

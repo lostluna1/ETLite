@@ -1,8 +1,8 @@
-// Controllers/ConnectionsController.cs
-
 using ETLiteAPI.Models;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using ConnectionInfo = ETLiteAPI.Models.ConnectionInfo;
 
 namespace ETLiteAPI.Controllers;
@@ -11,123 +11,72 @@ namespace ETLiteAPI.Controllers;
 [Route("api/[controller]")]
 public class ConnectionsController : ControllerBase
 {
-    private readonly string _appSettingsPath;
+    private readonly IFreeSql _freeSql;
+    private readonly IDataProtector _protector;
 
-    public ConnectionsController()
+    public ConnectionsController(IDictionary<string, IFreeSql> freeSqlDict, IDataProtectionProvider provider)
     {
-        _appSettingsPath = Path.Combine(AppContext.BaseDirectory, "appsettings.json");
+        // 从字典中获取默认的 IFreeSql 实例
+        _freeSql = freeSqlDict["Default"];
+        _protector = provider.CreateProtector("ConnectionInfoProtector");
     }
 
     [HttpGet]
-    public IActionResult GetConnections()
+    public async Task<IActionResult> GetConnections()
     {
-        if (System.IO.File.Exists(_appSettingsPath))
+        var connections = await _freeSql.Select<ConnectionInfo>().ToListAsync();
+        foreach (var connection in connections)
         {
-            var appSettingsJson = System.IO.File.ReadAllText(_appSettingsPath);
-            var appSettings = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(appSettingsJson) ?? new Dictionary<string, JsonElement>();
-
-            if (appSettings.ContainsKey("Connections"))
-            {
-                var connections = JsonSerializer.Deserialize<Dictionary<string, ConnectionInfo>>(appSettings["Connections"].GetRawText()) ?? new Dictionary<string, ConnectionInfo>();
-                return Ok(connections);
-            }
+            connection.Id = connection.Id;
+            connection.DatabaseType = _protector.Unprotect(connection.DatabaseType);
+            connection.ServerAddress = _protector.Unprotect(connection.ServerAddress);
+            connection.DatabaseName = _protector.Unprotect(connection.DatabaseName);
+            connection.Username = _protector.Unprotect(connection.Username);
+            connection.Password = _protector.Unprotect(connection.Password);
         }
-        return Ok(new Dictionary<string, ConnectionInfo>());
+        return Ok(connections);
     }
 
     [HttpPost]
-    public IActionResult SaveConnection([FromBody] ConnectionInfo connection)
+    public async Task<IActionResult> SaveConnection([FromBody] ConnectionInfo connection)
     {
-        var appSettings = new Dictionary<string, JsonElement>();
-
-        if (System.IO.File.Exists(_appSettingsPath))
-        {
-            var appSettingsJson = System.IO.File.ReadAllText(_appSettingsPath);
-            appSettings = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(appSettingsJson) ?? new Dictionary<string, JsonElement>();
-        }
-
-        var connections = new Dictionary<string, ConnectionInfo>();
-
-        if (appSettings.ContainsKey("Connections"))
-        {
-            connections = JsonSerializer.Deserialize<Dictionary<string, ConnectionInfo>>(appSettings["Connections"].GetRawText()) ?? new Dictionary<string, ConnectionInfo>();
-        }
-
-        if (!string.IsNullOrEmpty(connection.ConnectionName))
-        {
-            connections[connection.ConnectionName] = connection;
-        }
-
-        appSettings["Connections"] = JsonSerializer.SerializeToElement(connections);
-
-        var updatedAppSettingsJson = JsonSerializer.Serialize(appSettings, new JsonSerializerOptions { WriteIndented = true });
-        System.IO.File.WriteAllText(_appSettingsPath, updatedAppSettingsJson);
-
+        connection.Id = connection.Id;
+        connection.DatabaseType = _protector.Protect(connection.DatabaseType);
+        connection.ServerAddress = _protector.Protect(connection.ServerAddress);
+        connection.DatabaseName = _protector.Protect(connection.DatabaseName);
+        connection.Username = _protector.Protect(connection.Username);
+        connection.Password = _protector.Protect(connection.Password);
+        _freeSql.CodeFirst.SyncStructure<ConnectionInfo>();
+        await _freeSql.InsertOrUpdate<ConnectionInfo>().SetSource(connection).ExecuteAffrowsAsync();
         return NoContent();
     }
 
-
-    [HttpPut("{connectionName}")]
-    public IActionResult UpdateConnection(string connectionName, [FromBody] ConnectionInfo connection)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateConnection(string id, [FromBody] ConnectionInfo connection)
     {
-        if (connectionName != connection.ConnectionName)
+        if (id != connection.Id)
         {
-            return BadRequest("连接名称不匹配");
+            return BadRequest("连接ID不匹配");
         }
 
-        if (System.IO.File.Exists(_appSettingsPath))
-        {
-            var appSettingsJson = System.IO.File.ReadAllText(_appSettingsPath);
-            var appSettings = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(appSettingsJson) ?? new Dictionary<string, JsonElement>();
+        connection.DatabaseType = _protector.Protect(connection.DatabaseType);
+        connection.ServerAddress = _protector.Protect(connection.ServerAddress);
+        connection.DatabaseName = _protector.Protect(connection.DatabaseName);
+        connection.Username = _protector.Protect(connection.Username);
+        connection.Password = _protector.Protect(connection.Password);
 
-            if (appSettings.ContainsKey("Connections"))
-            {
-                var connections = JsonSerializer.Deserialize<Dictionary<string, ConnectionInfo>>(appSettings["Connections"].GetRawText()) ?? new Dictionary<string, ConnectionInfo>();
-
-                if (connections.ContainsKey(connectionName))
-                {
-                    connections[connectionName] = connection;
-
-                    appSettings["Connections"] = JsonSerializer.SerializeToElement(connections);
-
-                    var updatedAppSettingsJson = JsonSerializer.Serialize(appSettings, new JsonSerializerOptions { WriteIndented = true });
-                    System.IO.File.WriteAllText(_appSettingsPath, updatedAppSettingsJson);
-
-                    return NoContent();
-                }
-                else
-                {
-                    return NotFound("连接未找到");
-                }
-            }
-        }
-
-        return NotFound("配置文件未找到");
+        await _freeSql.Update<ConnectionInfo>().SetSource(connection).ExecuteAffrowsAsync();
+        return NoContent();
     }
-    [HttpDelete("{connectionName}")]
-    public IActionResult DeleteConnection(string connectionName)
+
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteConnection(string id)
     {
-        if (System.IO.File.Exists(_appSettingsPath))
+        var affectedRows = await _freeSql.Delete<ConnectionInfo>().Where(c => c.Id == id).ExecuteAffrowsAsync();
+        if (affectedRows > 0)
         {
-            var appSettingsJson = System.IO.File.ReadAllText(_appSettingsPath);
-            var appSettings = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(appSettingsJson) ?? new Dictionary<string, JsonElement>();
-
-            if (appSettings.ContainsKey("Connections"))
-            {
-                var connections = JsonSerializer.Deserialize<Dictionary<string, ConnectionInfo>>(appSettings["Connections"].GetRawText()) ?? new Dictionary<string, ConnectionInfo>();
-
-                if (connections.Remove(connectionName))
-                {
-                    appSettings["Connections"] = JsonSerializer.SerializeToElement(connections);
-
-                    var updatedAppSettingsJson = JsonSerializer.Serialize(appSettings, new JsonSerializerOptions { WriteIndented = true });
-                    System.IO.File.WriteAllText(_appSettingsPath, updatedAppSettingsJson);
-
-                    return NoContent();
-                }
-            }
+            return NoContent();
         }
-
         return NotFound();
     }
 }

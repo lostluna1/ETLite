@@ -2,6 +2,10 @@
 
 public class ConnectionInfo
 {
+    public string? Id
+    {
+        get; set;
+    } // 添加Id属性
     public string? ConnectionName
     {
         get; set;

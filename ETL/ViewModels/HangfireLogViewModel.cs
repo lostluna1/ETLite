@@ -12,11 +12,11 @@ namespace ETL.ViewModels;
 // https://docs.microsoft.com/microsoft-edge/webview2/get-started/winui
 // https://docs.microsoft.com/microsoft-edge/webview2/concepts/developer-guide
 // https://docs.microsoft.com/microsoft-edge/webview2/concepts/distribution
-public partial class WebContentViewModel : ObservableRecipient, INavigationAware
+public partial class HangfireLogViewModel : ObservableRecipient, INavigationAware
 {
     // TODO: Set the default URL to display.
     [ObservableProperty]
-    private Uri source = new("https://docs.microsoft.com/windows/apps/");
+    private Uri source = new("https://localhost:7220/hangfire");
 
     [ObservableProperty]
     private bool isLoading = true;
@@ -29,7 +29,7 @@ public partial class WebContentViewModel : ObservableRecipient, INavigationAware
         get;
     }
 
-    public WebContentViewModel(IWebViewService webViewService)
+    public HangfireLogViewModel(IWebViewService webViewService)
     {
         WebViewService = webViewService;
     }

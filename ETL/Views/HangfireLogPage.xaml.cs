@@ -5,16 +5,16 @@ using Microsoft.UI.Xaml.Controls;
 namespace ETL.Views;
 
 // To learn more about WebView2, see https://docs.microsoft.com/microsoft-edge/webview2/.
-public sealed partial class WebContentPage : Page
+public sealed partial class HangfireLogPage : Page
 {
-    public WebContentViewModel ViewModel
+    public HangfireLogViewModel ViewModel
     {
         get;
     }
 
-    public WebContentPage()
+    public HangfireLogPage()
     {
-        ViewModel = App.GetService<WebContentViewModel>();
+        ViewModel = App.GetService<HangfireLogViewModel>();
         InitializeComponent();
 
         ViewModel.WebViewService.Initialize(WebView);

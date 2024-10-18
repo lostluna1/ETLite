@@ -6,8 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:ETL.Controls"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Width="198"
-    Height="220"
+    Width="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Width}"
+    Height="{Binding RelativeSource={RelativeSource Mode=TemplatedParent}, Path=Height}"
     mc:Ignorable="d">
 
     <Grid
@@ -47,10 +47,12 @@
                 <RowDefinition Height="*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <ContentPresenter
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Content="{x:Bind Source, Mode=OneWay}" />
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                <ContentPresenter
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Stretch"
+                    Content="{x:Bind Source, Mode=OneWay}" />
+            </ScrollViewer>
 
             <StackPanel
                 Grid.Row="1"
@@ -70,4 +72,3 @@
         </Grid>
     </Grid>
 </UserControl>
-

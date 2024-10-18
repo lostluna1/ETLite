@@ -126,27 +126,6 @@
   <data name="Shell_Main.Content" xml:space="preserve">
     <value>Data Transform</value>
   </data>
-  <data name="WebView_Loading.Text" xml:space="preserve">
-    <value>Loading...</value>
-  </data>
-  <data name="WebView_FailedMessage.Text" xml:space="preserve">
-    <value>Page failed to load. Check connection and reload .</value>
-  </data>
-  <data name="BrowserBackButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
-    <value>Browser back</value>
-  </data>
-  <data name="BrowserBackButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
-    <value>Browser back</value>
-  </data>
-  <data name="BrowserForwardButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
-    <value>Browser forward</value>
-  </data>
-  <data name="BrowserForwardButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
-    <value>Browser forward</value>
-  </data>
-  <data name="WebView_Reload.Content" xml:space="preserve">
-    <value>Reload</value>
-  </data>
   <data name="ReloadButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
     <value>Reload</value>
   </data>
@@ -218,7 +197,10 @@
   <data name="DatabaseTypeComboBox.Header" xml:space="preserve">
     <value>DB Type</value>
   </data>
-  <data name="BrowserBackButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name1" xml:space="preserve">
+  <data name="BrowserBackButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
     <value>Browser back</value>
+  </data>
+  <data name="Shell_HangfireLog.Content" xml:space="preserve">
+    <value>Schedule Log</value>
   </data>
 </root>

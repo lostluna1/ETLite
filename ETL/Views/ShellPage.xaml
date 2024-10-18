@@ -51,11 +51,7 @@
                         <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE8BC;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem x:Uid="Shell_WebContent" helpers:NavigationHelper.NavigateTo="ETL.ViewModels.WebContentViewModel">
-                    <NavigationViewItem.Icon>
-                        <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xe774;" />
-                    </NavigationViewItem.Icon>
-                </NavigationViewItem>
+
                 <NavigationViewItem x:Uid="Shell_DBConfig" helpers:NavigationHelper.NavigateTo="ETL.ViewModels.DBConfigViewModel">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE71B;" />
@@ -69,6 +65,12 @@
                 <NavigationViewItem Visibility="Collapsed" x:Uid="Shell_Step2" helpers:NavigationHelper.NavigateTo="ETL.ViewModels.Step2ViewModel">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xe7c3;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+
+                <NavigationViewItem x:Uid="Shell_HangfireLog" helpers:NavigationHelper.NavigateTo="ETL.ViewModels.HangfireLogViewModel">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xe774;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
             </NavigationView.MenuItems>

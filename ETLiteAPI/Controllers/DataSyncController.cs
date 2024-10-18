@@ -27,6 +27,15 @@ public class DataSyncController : ControllerBase
             return StatusCode(500, result); 
         }
     }
+
+
+
+    [HttpPost("schedule-sync")]
+    public IActionResult ScheduleSyncData([FromBody] SyncRequest request)
+    {
+        _dataSyncService.ScheduleSyncData(request.SourceConnName, request.TargetConnName, request.TableName, request.Sql, request.PrimaryKeys);
+        return Ok("Scheduled");
+    }
 }
 
 

@@ -24,38 +24,26 @@ public class ConnectionManager
     {
         _httpClient = new HttpClient { BaseAddress = new Uri("https://localhost:7220/") }; // 替换为你的API地址
         SavedConnections = new ObservableCollection<ConnectionInfo>();
-        LoadSavedConnections();
+        _ = LoadSavedConnections();
     }
 
-    public void SetCurrentConnection(ConnectionInfo connection)
-    {
-        CurrentConnection = connection;
-    }
+    //public void SetCurrentConnection(ConnectionInfo connection)
+    //{
+    //    CurrentConnection = connection;
+    //}
 
-    public async void AddConnection(ConnectionInfo connection)
+    public void AddConnection(ConnectionInfo connection)
     {
         if (!SavedConnections.Contains(connection))
         {
-            SavedConnections.Add(connection);
-            await SaveConnectionToFile(connection);
         }
-    }
-
-    private async Task SaveConnectionToFile(ConnectionInfo connection)
-    {
-        var response = await _httpClient.PostAsJsonAsync("api/connections", connection);
-        response.EnsureSuccessStatusCode();
     }
 
     public void RemoveConnection(ConnectionInfo connection)
     {
-        if (SavedConnections.Contains(connection))
-        {
-            SavedConnections.Remove(connection);
-            SaveConnectionsToFile();
-        }
+        
     }
-    public async Task UpdateConnection(ConnectionInfo connection)
+    public Task UpdateConnection(ConnectionInfo connection)
     {
         var existingConnection = SavedConnections.FirstOrDefault(c => c.ConnectionName == connection.ConnectionName);
         if (existingConnection != null)
@@ -65,16 +53,13 @@ public class ConnectionManager
             existingConnection.DatabaseName = connection.DatabaseName;
             existingConnection.Username = connection.Username;
             existingConnection.Password = connection.Password;
+            existingConnection.Id = connection.Id;
 
-            await UpdateConnectionToFile(connection);
         }
+
+        return Task.CompletedTask;
     }
 
-    private async Task UpdateConnectionToFile(ConnectionInfo connection)
-    {
-        var response = await _httpClient.PutAsJsonAsync($"api/connections/{connection.ConnectionName}", connection);
-        response.EnsureSuccessStatusCode();
-    }
     private async Task LoadSavedConnections()
     {
         var response = await _httpClient.GetAsync("api/connections");
@@ -91,24 +76,5 @@ public class ConnectionManager
         }
     }
 
-    private void SaveConnectionsToFile()
-    {
-        var appSettingsPath = Path.Combine(AppContext.BaseDirectory, "appsettings.json");
-        var appSettings = new Dictionary<string, JsonElement>();
-
-        if (File.Exists(appSettingsPath))
-        {
-            var appSettingsJson = File.ReadAllText(appSettingsPath);
-            appSettings = JsonSerializer.Deserialize<Dictionary<string, JsonElement>>(appSettingsJson) ?? new Dictionary<string, JsonElement>();
-        }
-
-        var connections = SavedConnections
-            .Where(c => !string.IsNullOrEmpty(c.ConnectionName))
-            .ToDictionary(c => c.ConnectionName!, c => c); // 使用非空断言操作符
-
-        appSettings["Connections"] = JsonSerializer.SerializeToElement(connections);
-
-        var updatedAppSettingsJson = JsonSerializer.Serialize(appSettings, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(appSettingsPath, updatedAppSettingsJson);
-    }
+    
 }

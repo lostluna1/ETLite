@@ -15,12 +15,12 @@ public class PageService : IPageService
     public PageService()
     {
         Configure<MainViewModel, MainPage>();
-        Configure<WebContentViewModel, WebContentPage>();
         Configure<SettingsViewModel, SettingsPage>();
         Configure<DBConfigViewModel, DBConfigPage>();
         Configure<Step1ViewModel, Step1Page>();
         Configure<Step2ViewModel, Step2Page>();
 
+        Configure<HangfireLogViewModel, HangfireLogPage>();
     }
 
     public Type GetPageType(string key)
