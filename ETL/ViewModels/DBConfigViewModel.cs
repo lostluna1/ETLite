@@ -1,12 +1,26 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Text;
+using ETL.Contracts.Services;
 using ETL.Helpers;
 using ETL.Models;
+using ETL.Services;
 
 namespace ETL.ViewModels;
 
 public partial class DBConfigViewModel : ObservableValidator
 {
+    private readonly IDBConfigService _dbConfigService;
+
+    public DBConfigViewModel(IDBConfigService dbConfigService)
+    {
+        _dbConfigService = dbConfigService;
+        DatabaseTypes = new ObservableCollection<string> { "Oracle", "SQL Server", "MySQL" };
+        SavedConnections = new ObservableCollection<ConnectionInfo>();
+        _ = LoadSavedConnectionsAsync();
+    }
+
+    [ObservableProperty]
+    private XamlRoot? _xamlRoot;
 
     [Required]
     [ObservableProperty]
@@ -19,6 +33,7 @@ public partial class DBConfigViewModel : ObservableValidator
     [Required]
     [ObservableProperty]
     public string? _databaseName;
+
     [ObservableProperty]
     public string? _id;
 
@@ -49,19 +64,6 @@ public partial class DBConfigViewModel : ObservableValidator
             Id = value.Id;
         }
     }
-    private IFreeSql? _freeSql;
-
-    public XamlRoot? XamlRoot
-    {
-        get; set;
-    }
-
-    public DBConfigViewModel()
-    {
-        DatabaseTypes = new ObservableCollection<string> { "Oracle", "SQL Server", "MySQL" };
-        SavedConnections = new ObservableCollection<ConnectionInfo>();
-        _ = LoadSavedConnectionsAsync();
-    }
 
     public ObservableCollection<string> DatabaseTypes
     {
@@ -72,34 +74,15 @@ public partial class DBConfigViewModel : ObservableValidator
     {
         get;
     }
+
     private async Task LoadSavedConnectionsAsync()
     {
-        using var httpClient = new HttpClient();
-        var response = await httpClient.GetAsync("https://localhost:7220/api/connections");
-
-        if (response.IsSuccessStatusCode)
+        var connections = await _dbConfigService.LoadSavedConnectionsAsync();
+        foreach (var connection in connections)
         {
-            var json = await response.Content.ReadAsStringAsync();
-            var options = new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            };
-            var connections = JsonSerializer.Deserialize<List<ConnectionInfo>>(json, options);
-
-            if (connections != null)
-            {
-                foreach (var connection in connections)
-                {
-                    SavedConnections.Add(connection);
-                }
-            }
-        }
-        else
-        {
-            Debug.WriteLine("无法获取连接信息");
+            SavedConnections.Add(connection);
         }
     }
-
 
     [RelayCommand]
     private async Task AddConnectionAsync()
@@ -115,7 +98,6 @@ public partial class DBConfigViewModel : ObservableValidator
 
         var connectionInfo = new ConnectionInfo
         {
-            //Id = Guid.NewGuid().ToString(),
             Id = SelectedConnection?.Id ?? Guid.NewGuid().ToString(),
             ConnectionName = ConnectionName,
             DatabaseType = SelectedDatabaseType,
@@ -125,101 +107,57 @@ public partial class DBConfigViewModel : ObservableValidator
             Password = Password
         };
 
-        using var httpClient = new HttpClient();
-        var json = JsonSerializer.Serialize(connectionInfo);
-        var content = new StringContent(json, Encoding.UTF8, "application/json");
+        var isNewConnection = SelectedConnection == null;
+        var success = await _dbConfigService.AddOrUpdateConnectionAsync(connectionInfo, isNewConnection);
 
-        try
+        if (success)
         {
-            HttpResponseMessage response;
-            if (SelectedConnection == null)
+            if (isNewConnection)
             {
-                // 新增连接
-                response = await httpClient.PostAsync("https://localhost:7220/api/connections", content);
+                Debug.WriteLine("连接信息已保存");
+                await ShowDialogAsync("保存成功", "连接信息已保存");
+                SavedConnections.Add(connectionInfo);
             }
             else
             {
-                json = JsonSerializer.Serialize(SelectedConnection);
-                // 更新连接
-                response = await httpClient.PutAsync($"https://localhost:7220/api/connections/{SelectedConnection.Id}", content);
-            }
+                Debug.WriteLine("连接信息已更新");
+                await ShowDialogAsync("更新成功", "连接信息已更新");
 
-            //var responseContent = await response.Content.ReadAsStringAsync();
-            //Debug.WriteLine($"服务器响应: {responseContent}");
-
-            if (response.IsSuccessStatusCode)
-            {
-                //var savedConnection = JsonSerializer.Deserialize<ConnectionInfo>(responseContent);
-
-                //if (savedConnection != null)
-                //{
-                    if (SelectedConnection == null)
-                    {
-                        Debug.WriteLine("连接信息已保存");
-                        await ShowDialogAsync("保存成功", "连接信息已保存");
-                        SavedConnections.Add(connectionInfo);
-                    }
-                    else
-                    {
-                        Debug.WriteLine("连接信息已更新");
-                        await ShowDialogAsync("更新成功", "连接信息已更新");
-
-                        // 更新本地的连接信息
-                        var index = SavedConnections.IndexOf(SelectedConnection);
-                        if (index >= 0)
-                        {
-                            SavedConnections[index] = connectionInfo;
-                        }
-                    }
-                //}
-            }
-            else
-            {
-                Debug.WriteLine($"操作失败: {response.StatusCode}, {response.ReasonPhrase}");
-                await ShowDialogAsync("操作失败", $"无法保存或更新连接信息: {response.ReasonPhrase}");
+                var index = SavedConnections.IndexOf(SelectedConnection);
+                if (index >= 0)
+                {
+                    SavedConnections[index] = connectionInfo;
+                }
             }
         }
-        catch (JsonException jsonEx)
+        else
         {
-            Debug.WriteLine($"JSON 反序列化失败: {jsonEx.Message}");
-            await ShowDialogAsync("操作失败", $"JSON 反序列化失败: {jsonEx.Message}");
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"请求失败: {ex.Message}");
-            await ShowDialogAsync("操作失败", $"请求失败: {ex.Message}");
+            Debug.WriteLine("操作失败");
+            await ShowDialogAsync("操作失败", "无法保存或更新连接信息");
         }
     }
-
-
-
-
-
-
 
     [RelayCommand]
-    void NewConnection()
+    private void NewConnection()
     {
         SelectedConnection = null;
-        SelectedDatabaseType = null;
-        ServerAddress = null;
-        DatabaseName = null;
-        Username = null;
-        Password = null;
-        ConnectionName = null;
-        Id = null;
+        ConnectionName = string.Empty;
+        SelectedDatabaseType = string.Empty;
+        ServerAddress = string.Empty;
+        DatabaseName = string.Empty;
+        Username = string.Empty;
+        Password = string.Empty;
     }
+
+
     [RelayCommand]
     private async Task DeleteConnectionAsync()
     {
         if (SelectedConnection != null)
         {
-            using var httpClient = new HttpClient();
-            var response = await httpClient.DeleteAsync($"https://localhost:7220/api/connections/{SelectedConnection.Id}");
-
-            if (response.IsSuccessStatusCode)
+            var success = await _dbConfigService.DeleteConnectionAsync(SelectedConnection.Id);
+            if (success)
             {
-                //ConnectionManager.Instance.RemoveConnection(SelectedConnection); // 使用单例
                 SavedConnections.Remove(SelectedConnection);
                 Debug.WriteLine("连接已删除");
                 await ShowDialogAsync("删除成功", "连接已删除");
@@ -232,7 +170,6 @@ public partial class DBConfigViewModel : ObservableValidator
         }
     }
 
-
     [RelayCommand]
     private async Task ConnectAsync()
     {
@@ -244,72 +181,38 @@ public partial class DBConfigViewModel : ObservableValidator
                 return;
             }
 
-            switch (SelectedDatabaseType)
+            var connectionString = SelectedDatabaseType switch
             {
-                case "Oracle":
-                    await ConnectToDatabaseAsync(FreeSql.DataType.Oracle, ServerAddress, DatabaseName, Username, Password);
-                    break;
-                case "SQL Server":
-                    await ConnectToDatabaseAsync(FreeSql.DataType.SqlServer, ServerAddress, DatabaseName, Username, Password);
-                    break;
-                case "MySQL":
-                    await ConnectToDatabaseAsync(FreeSql.DataType.MySql, ServerAddress, DatabaseName, Username, Password);
-                    break;
-                default:
-                    await Task.CompletedTask;
-                    Debug.WriteLine("请选择数据库类型");
-                    break;
+                "Oracle" => $"Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST={ServerAddress})(PORT=1521))(CONNECT_DATA=(SERVICE_NAME={DatabaseName})));User Id={Username};Password={Password};Pooling=false;",
+                "SQL Server" => $"Server={ServerAddress};Database={DatabaseName};User Id={Username};Password={Password};",
+                "MySQL" => $"Server={ServerAddress};Database={DatabaseName};User={Username};Password={Password};",
+                _ => throw new NotSupportedException("不支持的数据库类型")
+            };
+
+            var dbType = SelectedDatabaseType switch
+            {
+                "Oracle" => FreeSql.DataType.Oracle,
+                "SQL Server" => FreeSql.DataType.SqlServer,
+                "MySQL" => FreeSql.DataType.MySql,
+                _ => throw new NotSupportedException("不支持的数据库类型")
+            };
+
+            var success = await _dbConfigService.ConnectToDatabaseAsync(dbType, connectionString);
+            if (success)
+            {
+                await ShowDialogAsync("连接成功", $"成功连接到{SelectedDatabaseType}数据库");
+            }
+            else
+            {
+                await ShowDialogAsync("连接失败", "无法连接到数据库");
             }
         }
         catch (Exception ex)
         {
             Debug.WriteLine($"连接失败: {ex.Message}");
-        }
-    }
-
-    private async Task ConnectToDatabaseAsync(FreeSql.DataType dbType, string server, string database, string user, string password)
-    {
-        var connectionString = dbType switch
-        {
-            FreeSql.DataType.Oracle => $"Data Source=(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST={server})(PORT=1521))(CONNECT_DATA=(SERVICE_NAME={database})));User Id={user};Password={password};Pooling=false;",
-            FreeSql.DataType.SqlServer => $"Server={server};Database={database};User Id={user};Password={password};",
-            FreeSql.DataType.MySql => $"Server={server};Database={database};User={user};Password={password};",
-            _ => throw new NotSupportedException("不支持的数据库类型")
-        };
-
-        _freeSql?.Dispose();
-
-        var freeSqlBuilder = new FreeSqlBuilder()
-            .UseConnectionString(dbType, connectionString)
-            .Build();
-
-        _freeSql = freeSqlBuilder;
-
-        try
-        {
-            using var connection = _freeSql.Ado.MasterPool.Get();
-            if (connection.Value.State == System.Data.ConnectionState.Closed)
-            {
-                await connection.Value.OpenAsync();
-                Debug.WriteLine($"成功连接到{dbType}数据库");
-                await ShowDialogAsync("连接成功", $"成功连接到{dbType}数据库");
-
-            }
-            else
-            {
-                Debug.WriteLine("连接已经打开");
-                await ShowDialogAsync("连接成功", "成功连接到数据库");
-            }
-        }
-        catch (Exception ex)
-        {
             await ShowDialogAsync("连接失败", ex.Message);
-
-            Debug.WriteLine($"Exception: {ex.Message}");
-            Debug.WriteLine($"Stack Trace: {ex.StackTrace}");
         }
     }
-
 
     private async Task ShowDialogAsync(string title, string content)
     {
