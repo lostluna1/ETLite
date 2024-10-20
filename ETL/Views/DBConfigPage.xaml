@@ -5,6 +5,7 @@
     xmlns:controls="using:ETL.Controls"
     xmlns:converters="using:ETL.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:l="using:WinUI3Localizer"
     xmlns:local="using:ETL.Views"
     xmlns:local1="using:ETL.Models"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -67,9 +68,10 @@
                 </controls:HeaderTile.Source>
             </controls:HeaderTile>
             <Button
-                Grid.Row="1" VerticalAlignment="Bottom"
+                Grid.Row="1"
+                VerticalAlignment="Bottom"
+                l:Uids.Uid="AddConnection"
                 Command="{x:Bind Path=ViewModel.NewConnectionCommand}"
-                Content="新建连接"
                 Style="{StaticResource AccentButtonStyle}" />
         </StackPanel>
 
@@ -79,10 +81,9 @@
             Margin="48,0,0,0">
             <ComboBox
                 x:Name="DatabaseTypeComboBox"
-                x:Uid="DatabaseTypeComboBox"
                 Width="150"
                 Margin="0,0,0,20"
-
+                l:Uids.Uid="DatabaseTypeComboBox"
                 ItemsSource="{x:Bind Path=ViewModel.DatabaseTypes}"
                 SelectedItem="{x:Bind Path=ViewModel.SelectedDatabaseType, Mode=TwoWay}">
                 <ComboBox.ItemTemplate>
@@ -101,39 +102,39 @@
             <TextBox
                 x:Name="ServerAddressTextBox"
                 Margin="0,0,0,20"
-                Header="服务器地址"
+                l:Uids.Uid="ServerAddress"
                 Text="{x:Bind Path=ViewModel.ServerAddress, Mode=TwoWay}" />
 
             <TextBox
                 x:Name="DatabaseNameTextBox"
                 Margin="0,0,0,20"
-                Header="数据库名称"
+                l:Uids.Uid="DBName"
                 Text="{x:Bind Path=ViewModel.DatabaseName, Mode=TwoWay}" />
 
             <TextBox
                 x:Name="UsernameTextBox"
                 Margin="0,0,0,20"
-                Header="用户名"
+                l:Uids.Uid="UserName"
                 Text="{x:Bind Path=ViewModel.Username, Mode=TwoWay}" />
 
             <PasswordBox
                 x:Name="PasswordBox"
                 Margin="0,0,0,20"
-                Header="密码"
+                l:Uids.Uid="Password"
                 Password="{x:Bind Path=ViewModel.Password, Mode=TwoWay}" />
 
             <TextBox
                 x:Name="ConnectionNameTextBox"
                 Margin="0,0,0,20"
-                Header="连接名称"
+                l:Uids.Uid="ConnectionName"
                 Text="{x:Bind Path=ViewModel.ConnectionName, Mode=TwoWay}" />
 
             <StackPanel Orientation="Horizontal">
                 <Button Command="{x:Bind Path=ViewModel.ConnectCommand}" Content="测试连接" />
                 <Button
                     Margin="10,0,0,0"
+                    l:Uids.Uid="Save"
                     Command="{x:Bind Path=ViewModel.AddConnectionCommand}"
-                    Content="保存"
                     Style="{StaticResource AccentButtonStyle}" />
             </StackPanel>
         </StackPanel>

@@ -1,79 +1,58 @@
-using ETLiteAPI.Models;
-using Microsoft.AspNetCore.DataProtection;
+using ETLiteAPI.Repositories.Service;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using ConnectionInfo = ETLiteAPI.Models.ConnectionInfo;
-
-namespace ETLiteAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
 public class ConnectionsController : ControllerBase
 {
-    private readonly IFreeSql _freeSql;
-    private readonly IDataProtector _protector;
+    private readonly IConnectionService _connectionService;
 
-    public ConnectionsController(IDictionary<string, IFreeSql> freeSqlDict, IDataProtectionProvider provider)
+    public ConnectionsController(IConnectionService connectionService)
     {
-        // 从字典中获取默认的 IFreeSql 实例
-        _freeSql = freeSqlDict["Default"];
-        _protector = provider.CreateProtector("ConnectionInfoProtector");
+        _connectionService = connectionService;
     }
 
     [HttpGet]
     public async Task<IActionResult> GetConnections()
     {
-        var connections = await _freeSql.Select<ConnectionInfo>().ToListAsync();
-        foreach (var connection in connections)
+        try
         {
-            connection.Id = connection.Id;
-            connection.DatabaseType = _protector.Unprotect(connection.DatabaseType);
-            connection.ServerAddress = _protector.Unprotect(connection.ServerAddress);
-            connection.DatabaseName = _protector.Unprotect(connection.DatabaseName);
-            connection.Username = _protector.Unprotect(connection.Username);
-            connection.Password = _protector.Unprotect(connection.Password);
+            var connections = await _connectionService.GetConnectionsAsync();
+            return Ok(connections);
         }
-        return Ok(connections);
+        catch (Exception ex)
+        {
+            return StatusCode(500, ex.Message);
+        }
     }
 
     [HttpPost]
     public async Task<IActionResult> SaveConnection([FromBody] ConnectionInfo connection)
     {
-        connection.Id = connection.Id;
-        connection.DatabaseType = _protector.Protect(connection.DatabaseType);
-        connection.ServerAddress = _protector.Protect(connection.ServerAddress);
-        connection.DatabaseName = _protector.Protect(connection.DatabaseName);
-        connection.Username = _protector.Protect(connection.Username);
-        connection.Password = _protector.Protect(connection.Password);
-        _freeSql.CodeFirst.SyncStructure<ConnectionInfo>();
-        await _freeSql.InsertOrUpdate<ConnectionInfo>().SetSource(connection).ExecuteAffrowsAsync();
+        await _connectionService.SaveConnectionAsync(connection);
         return NoContent();
     }
 
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateConnection(string id, [FromBody] ConnectionInfo connection)
     {
-        if (id != connection.Id)
+        try
         {
-            return BadRequest("连接ID不匹配");
+            await _connectionService.UpdateConnectionAsync(id, connection);
+            return NoContent();
         }
-
-        connection.DatabaseType = _protector.Protect(connection.DatabaseType);
-        connection.ServerAddress = _protector.Protect(connection.ServerAddress);
-        connection.DatabaseName = _protector.Protect(connection.DatabaseName);
-        connection.Username = _protector.Protect(connection.Username);
-        connection.Password = _protector.Protect(connection.Password);
-
-        await _freeSql.Update<ConnectionInfo>().SetSource(connection).ExecuteAffrowsAsync();
-        return NoContent();
+        catch (ArgumentException ex)
+        {
+            return BadRequest(ex.Message);
+        }
     }
 
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteConnection(string id)
     {
-        var affectedRows = await _freeSql.Delete<ConnectionInfo>().Where(c => c.Id == id).ExecuteAffrowsAsync();
-        if (affectedRows > 0)
+        var success = await _connectionService.DeleteConnectionAsync(id);
+        if (success)
         {
             return NoContent();
         }

@@ -12,7 +12,7 @@ using Windows.System;
 namespace ETL.Views;
 
 // TODO: Update NavigationViewItem titles and icons in ShellPage.xaml.
-public sealed partial class ShellPage : Page
+public /*sealed*/ partial class ShellPage : Page
 {
     public ShellViewModel ViewModel
     {
@@ -33,7 +33,7 @@ public sealed partial class ShellPage : Page
         App.MainWindow.ExtendsContentIntoTitleBar = true;
         App.MainWindow.SetTitleBar(AppTitleBar);
         App.MainWindow.Activated += MainWindow_Activated;
-        AppTitleBarText.Text = "AppDisplayName".GetLocalized();
+        AppTitleBarText.Text = "AppDisplayName".GetLocalizedString();
     }
 
     private void OnLoaded(object sender, Microsoft.UI.Xaml.RoutedEventArgs e)

@@ -33,7 +33,7 @@ public class DataSyncController : ControllerBase
     [HttpPost("schedule-sync")]
     public IActionResult ScheduleSyncData([FromBody] SyncRequest request)
     {
-        _dataSyncService.ScheduleSyncData(request.SourceConnName, request.TargetConnName, request.TableName, request.Sql, request.PrimaryKeys);
+        _dataSyncService.ScheduleSyncData(request.SourceConnName, request.TargetConnName, request.TableName, request.Sql,request.JobName!, request.PrimaryKeys);
         return Ok("Scheduled");
     }
 }
@@ -58,6 +58,10 @@ public class SyncRequest
     {
         get; set;
     }
+    public string? JobName
+    {
+        get; set;
+    } 
     public List<string>? PrimaryKeys
     {
         get; set;

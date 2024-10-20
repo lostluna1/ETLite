@@ -1,13 +1,10 @@
 using ETLiteAPI.FreeSqlUtilities;
+using ETLiteAPI.Repositories.Service;
 using ETLiteAPI.Services;
 using FreeSql;
 using Hangfire;
 using Hangfire.Console;
 using Hangfire.SqlServer;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
-using System.Collections.Generic;
-using System.Configuration;
 using System.Diagnostics;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,42 +18,10 @@ var configuration = configurationBuilder.Build();
 
 // 将生成的配置添加到服务容器中
 builder.Services.AddSingleton<IConfiguration>(configuration);
+builder.Services.AddTransient<IConnectionService, ConnectionService>();
+builder.Services.AddTransient<IHangfireJobsService, HangfireJobsService>();
 
 #region FreeSql
-// Add services to the container.
-/*builder.Services.AddSingleton<IDictionary<string, IFreeSql>>(provider =>
-{
-    var config = provider.GetRequiredService<IConfiguration>();
-    var connections = config.GetSection("Connections").Get<Dictionary<string, ETLiteAPI.Models.ConnectionInfo>>();
-
-    var freeSqlInstances = new Dictionary<string, IFreeSql>();
-
-    if (connections == null)
-    {
-        //throw new InvalidOperationException("未找到任何数据库连接配置。");
-    }
-
-    foreach (var connection in connections)
-    {
-        try
-        {
-            var connectionString = Connector.BuildConnectionString(connection.Value);
-            var dataType = Connector.GetDataType(connection.Value.DatabaseType);
-            var freeSql = new FreeSqlBuilder()
-            .UseMonitorCommand(cmd => Debug.WriteLine($"Sql：{cmd.CommandText}"))
-                .UseConnectionString(dataType, connectionString)
-                .Build();
-            freeSqlInstances[connection.Key] = freeSql;
-        }
-        catch (Exception ex)
-        {
-            throw new InvalidOperationException($"无法连接到数据库: {connection.Key}", ex);
-        }
-    }
-
-    return freeSqlInstances;
-});*/
-// 添加 FreeSql
 var freeSqlDict = new Dictionary<string, IFreeSql>
 {
     { "Default", new FreeSqlBuilder()
@@ -64,16 +29,22 @@ var freeSqlDict = new Dictionary<string, IFreeSql>
         .Build() }
 };
 
+// 添加 FreeSql
 builder.Services.AddSingleton<IDictionary<string, IFreeSql>>(freeSqlDict);
-
-
 #endregion
-
 
 builder.Services.AddTransient<IDataSyncService, DataSyncService>();
 
-// 添加数据保护服务
-builder.Services.AddDataProtection();
+// 注册 AES 加密服务
+var aesKey = configuration["AesEncryption:Key"];
+var aesIv = configuration["AesEncryption:IV"];
+
+if (string.IsNullOrEmpty(aesKey) || string.IsNullOrEmpty(aesIv))
+{
+    throw new InvalidOperationException("AES 加密服务的 Key 或 IV 未配置。");
+}
+
+builder.Services.AddSingleton<IAesEncryptionService>(provider => (IAesEncryptionService)new AesEncryptionService(aesKey, aesIv));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -94,12 +65,40 @@ builder.Services.AddHangfire(config =>
     {
         BackgroundColor = "#000079"
     });
-
-
 });
+
 builder.Services.AddHangfireServer();
 
 var app = builder.Build();
+
+// 初始化 FreeSql 连接
+await InitializeFreeSqlConnections(app.Services);
+
+async Task InitializeFreeSqlConnections(IServiceProvider services)
+{
+    using var scope = services.CreateScope();
+    var provider = scope.ServiceProvider;
+    var connectionService = provider.GetRequiredService<IConnectionService>();
+    var connections = await connectionService.GetConnectionsAsync();
+
+    foreach (var connection in connections)
+    {
+        try
+        {
+            var connectionString = Connector.BuildConnectionString(connection);
+            var dataType = Connector.GetDataType(connection.DatabaseType);
+            var freeSql = new FreeSqlBuilder()
+                .UseMonitorCommand(cmd => Debug.WriteLine($"Sql：{cmd.CommandText}"))
+                .UseConnectionString(dataType, connectionString)
+                .Build();
+            freeSqlDict[connection.ConnectionName] = freeSql;
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException($"无法连接到数据库: {connection.ConnectionName}", ex);
+        }
+    }
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

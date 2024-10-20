@@ -1,21 +1,10 @@
-using System.Reflection;
-using ETLiteAPI.Models;
 using FreeSql;
-using FreeSql.DatabaseModel;
-using FreeSql.Internal.Model;
-using Microsoft.Extensions.Logging;
-using ConnectionInfo = ETLiteAPI.Models.ConnectionInfo;
-using FreeSql.Extensions.ZeroEntity;
-using static FreeSql.Extensions.ZeroEntity.TableDescriptor;
-using Newtonsoft.Json;
 using FreeSql.DataAnnotations;
-using System;
 using ETLiteAPI.FreeSqlUtilities;
 using Hangfire;
-using Hangfire.Storage.Monitoring;
 
 namespace ETLiteAPI.Services;
-public class DataSyncService(/*IConfiguration configuration,*/ ILogger<DataSyncService> logger, IDictionary<string, IFreeSql> freeSqlInstances) : IDataSyncService
+public class DataSyncService(ILogger<DataSyncService> logger, IDictionary<string, IFreeSql> freeSqlInstances) : IDataSyncService
 {
     //private readonly IConfiguration _configuration = configuration;
     private readonly ILogger<DataSyncService> _logger = logger;
@@ -35,6 +24,8 @@ public class DataSyncService(/*IConfiguration configuration,*/ ILogger<DataSyncS
 
             // 无实体查询源数据库中的数据
             var sourceData = sourceFsql.Ado.Query<Dictionary<string, object>>(sql);
+
+            var sourcedata = sourceFsql.Select<object>().WithSql(sql).ToList();
 
             _logger.LogInformation("成功查询源数据库中的数据: {TableName}", tableName);
 
@@ -105,57 +96,22 @@ public class DataSyncService(/*IConfiguration configuration,*/ ILogger<DataSyncS
     //    RecurringJob.AddOrUpdate(() => SyncData(sourceConnName, targetConnName, tableName, sql, primaryKeys), "*/1 * * * *"); 
     //}
 
-    public string ScheduleSyncData(string sourceConnName, string targetConnName, string tableName, string sql, List<string>? primaryKeys = null)
+    //public string ScheduleSyncData(string sourceConnName, string targetConnName, string tableName, string sql, List<string>? primaryKeys = null)
+    //{
+    //    var jobId = Guid.NewGuid().ToString();
+
+    //    RecurringJob.AddOrUpdate(jobId, () => SyncData(sourceConnName, targetConnName, tableName, sql, primaryKeys), "*/1 * * * *");
+
+    //    return jobId;
+    //}
+
+    public string ScheduleSyncData(string sourceConnName, string targetConnName, string tableName, string sql, string jobName, List<string>? primaryKeys = null)
     {
-        // 生成一个唯一的 jobId
-        var jobId = Guid.NewGuid().ToString();
+        var uniqueJobName = $"{jobName}_{Guid.NewGuid()}";
+        RecurringJob.AddOrUpdate(uniqueJobName, () => SyncData(sourceConnName, targetConnName, tableName, sql, primaryKeys), "*/1 * * * *");
 
-        // 使用生成的 jobId 创建或更新定时任务
-        RecurringJob.AddOrUpdate(jobId, () => SyncData(sourceConnName, targetConnName, tableName, sql, primaryKeys), "*/1 * * * *");
-
-        _logger.LogInformation("开始打印消息");
-
-        var jobDetails = GetJobDetails(jobId);
-        _logger.LogInformation("Job Details: JobId={JobId}, CreatedAt={CreatedAt}, State={State}, Properties={Properties}",
-            jobId, jobDetails.CreatedAt, jobDetails.State, JsonConvert.SerializeObject(jobDetails.Properties));
-
-        return jobId;
+        return jobName;
     }
 
-
-    public ExtendedJobDetailsDto GetJobDetails(string jobId)
-    {
-        using var connection = JobStorage.Current.GetConnection();
-        var jobData = connection.GetJobData(jobId);
-        var stateData = connection.GetStateData(jobId);
-
-        if (jobData == null || stateData == null)
-        {
-            _logger.LogWarning("Job data or state data for jobId {JobId} is null.", jobId);
-            return new ExtendedJobDetailsDto
-            {
-                CreatedAt = null,
-                State = "Unknown",
-                Properties = new Dictionary<string, string>()
-            };
-        }
-
-        return new ExtendedJobDetailsDto
-        {
-            CreatedAt = jobData.CreatedAt,
-            State = stateData.Name,
-            Properties = stateData.Data
-        };
-    }
-
-
-
-    public class ExtendedJobDetailsDto : JobDetailsDto
-    {
-        public string State
-        {
-            get; set;
-        }
-    }
 
 }

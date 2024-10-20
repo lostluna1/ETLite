@@ -12,13 +12,16 @@ public class ActivationService : IActivationService
     private readonly ActivationHandler<LaunchActivatedEventArgs> _defaultHandler;
     private readonly IEnumerable<IActivationHandler> _activationHandlers;
     private readonly IThemeSelectorService _themeSelectorService;
+    private readonly ILocalizationService _localizerService;
+
     private UIElement? _shell = null;
 
-    public ActivationService(ActivationHandler<LaunchActivatedEventArgs> defaultHandler, IEnumerable<IActivationHandler> activationHandlers, IThemeSelectorService themeSelectorService)
+    public ActivationService(ActivationHandler<LaunchActivatedEventArgs> defaultHandler, IEnumerable<IActivationHandler> activationHandlers, IThemeSelectorService themeSelectorService, ILocalizationService localizationService)
     {
         _defaultHandler = defaultHandler;
         _activationHandlers = activationHandlers;
         _themeSelectorService = themeSelectorService;
+        _localizerService = localizationService;
     }
 
     public async Task ActivateAsync(object activationArgs)
@@ -60,6 +63,7 @@ public class ActivationService : IActivationService
 
     private async Task InitializeAsync()
     {
+        await _localizerService.InitializeAsync();
         await _themeSelectorService.InitializeAsync().ConfigureAwait(false);
         await Task.CompletedTask;
     }

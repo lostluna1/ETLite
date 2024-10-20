@@ -21,6 +21,7 @@ public class PageService : IPageService
         Configure<Step2ViewModel, Step2Page>();
 
         Configure<HangfireLogViewModel, HangfireLogPage>();
+        Configure<HangFireResultsViewModel, HangFireResultsPage>();
     }
 
     public Type GetPageType(string key)

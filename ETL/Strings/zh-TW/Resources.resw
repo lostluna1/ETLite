@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,56 +117,38 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AppDisplayName" xml:space="preserve">
-    <value>ETLite</value>
-  </data>
   <data name="AppDescription" xml:space="preserve">
     <value>ETLite</value>
   </data>
   <data name="Shell_Main.Content" xml:space="preserve">
-    <value>Data Transform</value>
-  </data>
-  <data name="ReloadButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
-    <value>Reload</value>
+    <value>數據轉換</value>
   </data>
   <data name="ReloadButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
-    <value>Reload</value>
+    <value>重載頁面</value>
   </data>
   <data name="OpenInBrowserButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
-    <value>Open in browser</value>
+    <value>在瀏覽器中開啟</value>
   </data>
   <data name="OpenInBrowserButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
-    <value>Open in browser</value>
-  </data>
-  <data name="Shell_WebContent.Content" xml:space="preserve">
-    <value>WebContent</value>
+    <value>在瀏覽器中開啟</value>
   </data>
   <data name="Settings_Personalization.Text" xml:space="preserve">
-    <value>Personalization</value>
+    <value>個人化</value>
   </data>
   <data name="Settings_Theme.Text" xml:space="preserve">
-    <value>Theme</value>
+    <value>主題</value>
   </data>
   <data name="Settings_Theme_Light.Content" xml:space="preserve">
-    <value>Light</value>
+    <value>明亮</value>
   </data>
   <data name="Settings_Theme_Dark.Content" xml:space="preserve">
-    <value>Dark</value>
+    <value>暗黑</value>
   </data>
   <data name="Settings_Theme_Default.Content" xml:space="preserve">
-    <value>Default</value>
+    <value>跟隨系統</value>
   </data>
-  <data name="Settings_About.Text" xml:space="preserve">
-    <value>About this application</value>
-  </data>
-  <data name="Settings_AboutDescription.Text" xml:space="preserve">
-    <value>TODO: Replace with your app description.</value>
-  </data>
-  <data name="SettingsPage_PrivacyTermsLink.Content" xml:space="preserve">
-    <value>Privacy Statement</value>
-  </data>
-  <data name="SettingsPage_PrivacyTermsLink.NavigateUri" xml:space="preserve">
-    <value>https://YourPrivacyUrlGoesHere/</value>
+  <data name="AppDisplayName" xml:space="preserve">
+    <value>ETLite</value>
   </data>
   <data name="AppNotificationSamplePayload" xml:space="preserve">
     <value>&lt;toast launch="action=ToastClick"&gt;
@@ -182,98 +164,116 @@
   &lt;/actions&gt;
 &lt;/toast&gt;</value>
   </data>
-  <data name="Shell_DBConfig.Content" xml:space="preserve">
-    <value>DBConfig</value>
-  </data>
-  <data name="LanguagesComboBox.Header" xml:space="preserve">
-    <value>Settings Language</value>
-  </data>
-  <data name="Shell_Step1.Content" xml:space="preserve">
-    <value>Step1</value>
-  </data>
-  <data name="Shell_Step2.Content" xml:space="preserve">
-    <value>Step2</value>
+  <data name="BrowserBackButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
+    <value>後退</value>
   </data>
   <data name="DatabaseTypeComboBox.Header" xml:space="preserve">
-    <value>DB Type</value>
+    <value>資料庫類型</value>
   </data>
-  <data name="BrowserBackButton.[using:Microsoft.UI.Xaml.Automation]AutomationProperties.Name" xml:space="preserve">
-    <value>Browser back</value>
+  <data name="DataGrid_TaskArgs.Header" xml:space="preserve">
+    <value>參數</value>
   </data>
-  <data name="Shell_HangfireLog.Content" xml:space="preserve">
-    <value>Schedule Log</value>
+  <data name="DataGrid_TaskDeletedAt.Header" xml:space="preserve">
+    <value>刪除時間</value>
   </data>
-  <data name="HangFireResults_NoSelection.Text" xml:space="preserve">
-    <value>Select an item from the list.</value>
+  <data name="DataGrid_TaskEnqueuedAt.Header" xml:space="preserve">
+    <value>入隊時間</value>
   </data>
-  <data name="Shell_HangFireResults.Content" xml:space="preserve">
-    <value>HangFireResults</value>
+  <data name="DataGrid_TaskExceptionMessage.Header" xml:space="preserve">
+    <value>異常訊息</value>
   </data>
-  <data name="Expander_Header_DeletedTasks.Text" xml:space="preserve">
-    <value>Deleted Tasks</value>
+  <data name="DataGrid_TaskFailedAt.Header" xml:space="preserve">
+    <value>失敗時間</value>
   </data>
-  <data name="Expander_Header_WaitingTasks.Text" xml:space="preserve">
-    <value>Waiting Tasks</value>
-  </data>
-  <data name="Expander_Header_FailedTasks.Text" xml:space="preserve">
-    <value>Failed Tasks</value>
-  </data>
-  <data name="Expander_Header_SuccessfulTasks.Text" xml:space="preserve">
-    <value>Successful Tasks</value>
-  </data>
-  <data name="Expander_Header_RunningTasks.Text" xml:space="preserve">
-    <value>Running Tasks</value>
-  </data>
-  <data name="Expander_Header_QueuedTasks.Text" xml:space="preserve">
-    <value>Queued Tasks</value>
-  </data>
-  <data name="Expander_Header_AllTasks.Text" xml:space="preserve">
-    <value>All Tasks</value>
+  <data name="DataGrid_TaskID.Header" xml:space="preserve">
+    <value>ID</value>
   </data>
   <data name="DataGrid_TaskKey.Header" xml:space="preserve">
     <value>Key</value>
   </data>
+  <data name="DataGrid_TaskLastExecution.Header" xml:space="preserve">
+    <value>上次執行時間</value>
+  </data>
+  <data name="DataGrid_TaskLastJobState.Header" xml:space="preserve">
+    <value>最近運作狀態</value>
+  </data>
   <data name="DataGrid_TaskMethod.Header" xml:space="preserve">
     <value>Method</value>
   </data>
-  <data name="DataGrid_TaskWaitingSince.Header" xml:space="preserve">
-    <value>Waiting Since</value>
-  </data>
-  <data name="DataGrid_TaskArgs.Header" xml:space="preserve">
-    <value>Task Args</value>
-  </data>
-  <data name="DataGrid_TaskDeletedAt.Header" xml:space="preserve">
-    <value>Task Deleted At</value>
-  </data>
-  <data name="DataGrid_TaskFailedAt.Header" xml:space="preserve">
-    <value>Task Failed At</value>
-  </data>
-  <data name="DataGrid_TaskExceptionMessage.Header" xml:space="preserve">
-    <value>Task ExceptionMessage</value>
-  </data>
-  <data name="DataGrid_TaskTotalDuration.Header" xml:space="preserve">
-    <value>Task Total Duration(ms)</value>
-  </data>
-  <data name="DataGrid_TaskSucceededAt.Header" xml:space="preserve">
-    <value>Task Succeeded At</value>
+  <data name="DataGrid_TaskNextExecution.Header" xml:space="preserve">
+    <value>下次執行時間</value>
   </data>
   <data name="DataGrid_TaskStartedAt.Header" xml:space="preserve">
-    <value>Task Started At</value>
+    <value>開始時間</value>
   </data>
-  <data name="DataGrid_TaskEnqueuedAt.Header" xml:space="preserve">
-    <value>Task Enqueued At</value>
+  <data name="DataGrid_TaskSucceededAt.Header" xml:space="preserve">
+    <value>運行時間</value>
   </data>
-  <data name="DataGrid_TaskLastJobState.Header" xml:space="preserve">
-    <value>Task Last JobState</value>
+  <data name="DataGrid_TaskTotalDuration.Header" xml:space="preserve">
+    <value>總耗時(ms)</value>
   </data>
-  <data name="DataGrid_TaskNextExecution.Header" xml:space="preserve">
-    <value>Task Next Execution</value>
+  <data name="DataGrid_TaskWaitingSince.Header" xml:space="preserve">
+    <value>等待時間</value>
   </data>
-  <data name="DataGrid_TaskLastExecution.Header" xml:space="preserve">
-    <value>Task Last Execution</value>
+  <data name="Expander_Header_AllTasks.Text" xml:space="preserve">
+    <value>所有任務</value>
   </data>
-  <data name="DataGrid_TaskID.Header" xml:space="preserve">
-    <value>Task ID</value>
+  <data name="Expander_Header_DeletedTasks.Text" xml:space="preserve">
+    <value>已刪除的任務</value>
+  </data>
+  <data name="Expander_Header_FailedTasks.Text" xml:space="preserve">
+    <value>已失敗的任務</value>
+  </data>
+  <data name="Expander_Header_QueuedTasks.Text" xml:space="preserve">
+    <value>隊列中的任務</value>
+  </data>
+  <data name="Expander_Header_RunningTasks.Text" xml:space="preserve">
+    <value>運行中的任務</value>
+  </data>
+  <data name="Expander_Header_SuccessfulTasks.Text" xml:space="preserve">
+    <value>成功運行的任務</value>
+  </data>
+  <data name="Expander_Header_WaitingTasks.Text" xml:space="preserve">
+    <value>待運行的任務</value>
+  </data>
+  <data name="ReloadButton.[using:Microsoft.UI.Xaml.Controls]ToolTipService.ToolTip" xml:space="preserve">
+    <value>Reload</value>
+  </data>
+  <data name="Settings_About.Text" xml:space="preserve">
+    <value>關於</value>
+  </data>
+  <data name="LanguagesComboBox.Header" xml:space="preserve">
+    <value>語言設定</value>
+  </data>
+  <data name="Shell_DBConfig.Content" xml:space="preserve">
+    <value>資料庫配置</value>
+  </data>
+  <data name="Shell_HangfireLog.Content" xml:space="preserve">
+    <value>任務運行記錄</value>
+  </data>
+  <data name="Shell_HangFireResults.Content" xml:space="preserve">
+    <value>任務運行記錄</value>
+  </data>
+  <data name="Shell_Step1.Content" xml:space="preserve">
+    <value>第一步</value>
+  </data>
+  <data name="Shell_Step2.Content" xml:space="preserve">
+    <value>第二步</value>
+  </data>
+  <data name="Shell_WebContent.Content" xml:space="preserve">
+    <value>WebContent</value>
+  </data>
+  <data name="HangFireResults_NoSelection.Text" xml:space="preserve">
+    <value>Select an item from the list.</value>
+  </data>
+  <data name="Settings_AboutDescription.Text" xml:space="preserve">
+    <value>TODO: Replace with your app description.</value>
+  </data>
+  <data name="SettingsPage_PrivacyTermsLink.Content" xml:space="preserve">
+    <value>Privacy Statement</value>
+  </data>
+  <data name="SettingsPage_PrivacyTermsLink.NavigateUri" xml:space="preserve">
+    <value>https://YourPrivacyUrlGoesHere/</value>
   </data>
   <data name="Settings_Language_en-us.Text" xml:space="preserve">
     <value>English</value>
@@ -282,30 +282,30 @@
     <value>简体中文</value>
   </data>
   <data name="Settings_Language_zh-TW.Text" xml:space="preserve">
-    <value>繁体中文(台湾)</value>
+    <value>繁體中文(台灣)</value>
   </data>
   <data name="SettingsPage.Content" xml:space="preserve">
-    <value>Settings</value>
+    <value>設定</value>
   </data>
   <data name="AddConnection.Content" xml:space="preserve">
-    <value>Add a New Connection</value>
+    <value>新建連結</value>
   </data>
   <data name="ServerAddress.Header" xml:space="preserve">
-    <value>Server Address</value>
+    <value>伺服器地址</value>
   </data>
   <data name="DBName.Header" xml:space="preserve">
-    <value>Database Name</value>
+    <value>資料庫名稱</value>
   </data>
   <data name="UserName.Header" xml:space="preserve">
-    <value>User Name</value>
+    <value>用戶名</value>
   </data>
   <data name="Password.Header" xml:space="preserve">
-    <value>Password</value>
+    <value>密碼</value>
   </data>
   <data name="ConnectionName.Header" xml:space="preserve">
-    <value>Connection Name</value>
+    <value>自定義連結名稱</value>
   </data>
   <data name="Save.Content" xml:space="preserve">
-    <value>Save</value>
+    <value>儲存</value>
   </data>
 </root>

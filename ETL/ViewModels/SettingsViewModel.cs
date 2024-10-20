@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System.Configuration;
+using System.Globalization;
 using System.Reflection;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -6,46 +7,33 @@ using CommunityToolkit.Mvvm.Input;
 using ETL.Contracts.Services;
 using ETL.Contracts.ViewModels;
 using ETL.Helpers;
+using ETL.Models;
 using ETL.Views;
+using Microsoft.Extensions.Configuration;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Windows.ApplicationModel;
+using Windows.ApplicationModel.Core;
 using Windows.Globalization;
 using static ETL.Views.ShellPage;
 namespace ETL.ViewModels;
 
-public partial class SettingsViewModel : ObservableRecipient, INavigationAware
+public partial class SettingsViewModel : ObservableRecipient
 {
     private readonly IThemeSelectorService _themeSelectorService;
-
-    [ObservableProperty]
     private ElementTheme _elementTheme;
-
-    [ObservableProperty]
     private string _versionDescription;
 
+    private readonly ILocalizationService _localizationService;
+
     [ObservableProperty]
-    private string _selectedLanguage;
+    private LanguageItem _selectedLanguage;
 
-    public ICommand SwitchThemeCommand
-    {
-        get;
-    }
-    public void OnNavigatedTo(object parameter)
-    {
-    
-    }
-
-    public void OnNavigatedFrom()
-    {
-    
-    }
-    public SettingsViewModel(IThemeSelectorService themeSelectorService)
+    public SettingsViewModel(IThemeSelectorService themeSelectorService, ILocalizationService localizationService)
     {
         _themeSelectorService = themeSelectorService;
         _elementTheme = _themeSelectorService.Theme;
         _versionDescription = GetVersionDescription();
-        _selectedLanguage = ApplicationLanguages.PrimaryLanguageOverride;
 
         SwitchThemeCommand = new RelayCommand<ElementTheme>(
             async (param) =>
@@ -56,6 +44,40 @@ public partial class SettingsViewModel : ObservableRecipient, INavigationAware
                     await _themeSelectorService.SetThemeAsync(param);
                 }
             });
+
+        _localizationService = localizationService;
+        AvailableLanguages = _localizationService.GetAvailableLanguages()
+            .Select(x => new LanguageItem(Language: x, UidKey: $"{"Settings_Language"}_{x}"))
+            .ToList();
+
+        _selectedLanguage = AvailableLanguages.First(x => x.Language == _localizationService.GetCurrentLanguage());
+    }
+
+    async partial void OnSelectedLanguageChanged(LanguageItem value)
+    {
+        await _localizationService.SetLanguageAsync(value.Language);
+    }
+
+    public ElementTheme ElementTheme
+    {
+        get => _elementTheme;
+        set => SetProperty(ref _elementTheme, value);
+    }
+
+    public List<LanguageItem> AvailableLanguages
+    {
+        get; set;
+    }
+
+    public string VersionDescription
+    {
+        get => _versionDescription;
+        set => SetProperty(ref _versionDescription, value);
+    }
+
+    public ICommand SwitchThemeCommand
+    {
+        get;
     }
 
     private static string GetVersionDescription()
@@ -65,6 +87,7 @@ public partial class SettingsViewModel : ObservableRecipient, INavigationAware
         if (RuntimeHelper.IsMSIX)
         {
             var packageVersion = Package.Current.Id.Version;
+
             version = new(packageVersion.Major, packageVersion.Minor, packageVersion.Build, packageVersion.Revision);
         }
         else
@@ -72,19 +95,6 @@ public partial class SettingsViewModel : ObservableRecipient, INavigationAware
             version = Assembly.GetExecutingAssembly().GetName().Version!;
         }
 
-        return $"{"AppDisplayName".GetLocalized()} - {version.Major}.{version.Minor}.{version.Build}.{version.Revision}";
+        return $"{"AppDisplayName".GetLocalizedString()} - {version.Major}.{version.Minor}.{version.Build}.{version.Revision}";
     }
-
-    partial void OnSelectedLanguageChanged(string value)
-    {
-        if (!string.IsNullOrEmpty(value))
-        {
-            ApplicationLanguages.PrimaryLanguageOverride = value;
-            //MainWindow mainWindow = new MainWindow();
-            //mainWindow.Activate();
-            //NavigationFrame.Navigate(typeof(SettingsPage));
-        }
-    }
-
-
 }

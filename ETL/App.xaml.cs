@@ -8,10 +8,12 @@ using ETL.Notifications;
 using ETL.Services;
 using ETL.ViewModels;
 using ETL.Views;
-
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+
 using Windows.Globalization;
+
 namespace ETL;
 
 // To learn more about WinUI 3, see https://docs.microsoft.com/windows/apps/winui/winui3/.
@@ -67,16 +69,21 @@ public partial class App : Application
             services.AddSingleton<ILocalSettingsService, LocalSettingsService>();
             services.AddSingleton<IThemeSelectorService, ThemeSelectorService>();
             services.AddTransient<INavigationViewService, NavigationViewService>();
+            services.AddSingleton<IHangfireJobService, HangfireJobService>();
 
             services.AddSingleton<IActivationService, ActivationService>();
             services.AddSingleton<IPageService, PageService>();
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<IDBConfigService, DBConfigService>();
+            services.AddSingleton<ILocalizationService, LocalizationService>();
 
             // Core Services
+            services.AddSingleton<ISampleDataService, SampleDataService>();
             services.AddSingleton<IFileService, FileService>();
 
             // Views and ViewModels
+            services.AddTransient<HangFireResultsViewModel>();
+            services.AddTransient<HangFireResultsPage>();
             services.AddTransient<HangfireLogViewModel>();
             services.AddTransient<HangfireLogPage>();
             services.AddTransient<Step2ViewModel>();
@@ -97,7 +104,13 @@ public partial class App : Application
             services.Configure<LocalSettingsOptions>(context.Configuration.GetSection(nameof(LocalSettingsOptions)));
         }).
         Build();
-
+        // 从配置文件中读取语言设置
+        //var configuration = Host.Services.GetRequiredService<IConfiguration>();
+        //var language = configuration["AppSettings:Language"];
+        //if (!string.IsNullOrEmpty(language))
+        //{
+        //    ApplicationLanguages.PrimaryLanguageOverride = language;
+        //}
         App.GetService<IAppNotificationService>().Initialize();
 
         UnhandledException += App_UnhandledException;
@@ -121,14 +134,25 @@ public partial class App : Application
             isDialogOpen = false;
         }
     }
+    //public void ChangeLanguage(string languageCode)
+    //{
+    //    ApplicationLanguages.PrimaryLanguageOverride = languageCode;
+
+    //    // 重新加载主窗口以应用语言更改
+    //    MainWindow.Content = null;
+    //    MainWindow.Content = new Frame();
+    //    MainWindow.Content.Navigate(typeof(MainWindow));
+    //}
 
     protected async override void OnLaunched(LaunchActivatedEventArgs args)
     {
         base.OnLaunched(args);
-        ApplicationLanguages.PrimaryLanguageOverride = "zh-CN";
+        //ApplicationLanguages.PrimaryLanguageOverride = ConfigurationManager.Instance.GetValue("AppSettings", "Language")??"zh-CN";
 
-        App.GetService<IAppNotificationService>().Show(string.Format("AppNotificationSamplePayload".GetLocalized(), AppContext.BaseDirectory));
+        //App.GetService<IAppNotificationService>().Show(string.Format("AppNotificationSamplePayload".GetLocalized(), AppContext.BaseDirectory));
 
         await App.GetService<IActivationService>().ActivateAsync(args);
+        App.GetService<IAppNotificationService>().Show(string.Format("AppNotificationSamplePayload".GetLocalizedString(), AppContext.BaseDirectory));
+
     }
 }

@@ -6,6 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:helpers="using:ETL.Helpers"
     xmlns:i="using:Microsoft.Xaml.Interactivity"
+    xmlns:l="using:WinUI3Localizer"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     Loaded="OnLoaded">
 
@@ -40,37 +41,48 @@
             SelectedItem="{x:Bind ViewModel.Selected, Mode=OneWay}">
             <NavigationView.MenuItems>
                 <!--
-                TODO: Update item titles by updating <x:Uid>.Content entries in Strings/en-us/Resources.resw.
+                TODO: Update item titles by updating <l:Uids.Uid>.Content entries in Strings/en-us/Resources.resw.
                 https://docs.microsoft.com/windows/uwp/app-resources/localize-strings-ui-manifest#refer-to-a-string-resource-identifier-from-xaml
 
                 TODO: Update item icons by updating FontIcon.Glyph properties.
                 https://docs.microsoft.com/windows/apps/design/style/segoe-fluent-icons-font#icon-list
                 -->
-                <NavigationViewItem x:Uid="Shell_Main" helpers:NavigationHelper.NavigateTo="ETL.ViewModels.MainViewModel">
+                <NavigationViewItem helpers:NavigationHelper.NavigateTo="ETL.ViewModels.MainViewModel" l:Uids.Uid="Shell_Main">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE8BC;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
 
-                <NavigationViewItem x:Uid="Shell_DBConfig" helpers:NavigationHelper.NavigateTo="ETL.ViewModels.DBConfigViewModel">
+                <NavigationViewItem helpers:NavigationHelper.NavigateTo="ETL.ViewModels.DBConfigViewModel" l:Uids.Uid="Shell_DBConfig">
                     <NavigationViewItem.Icon>
                         <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xE71B;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Visibility="Collapsed" x:Uid="Shell_Step1" helpers:NavigationHelper.NavigateTo="ETL.ViewModels.Step1ViewModel">
+                <NavigationViewItem
+                    helpers:NavigationHelper.NavigateTo="ETL.ViewModels.Step1ViewModel"
+                    l:Uids.Uid="Shell_Step1"
+                    Visibility="Collapsed">
                     <NavigationViewItem.Icon>
-                        <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xe7c3;"/>
+                        <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xe7c3;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
-                <NavigationViewItem Visibility="Collapsed" x:Uid="Shell_Step2" helpers:NavigationHelper.NavigateTo="ETL.ViewModels.Step2ViewModel">
+                <NavigationViewItem
+                    helpers:NavigationHelper.NavigateTo="ETL.ViewModels.Step2ViewModel"
+                    l:Uids.Uid="Shell_Step2"
+                    Visibility="Collapsed">
                     <NavigationViewItem.Icon>
-                        <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xe7c3;"/>
+                        <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xe7c3;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
 
-                <NavigationViewItem x:Uid="Shell_HangfireLog" helpers:NavigationHelper.NavigateTo="ETL.ViewModels.HangfireLogViewModel">
+                <NavigationViewItem helpers:NavigationHelper.NavigateTo="ETL.ViewModels.HangfireLogViewModel" l:Uids.Uid="Shell_HangfireLog">
                     <NavigationViewItem.Icon>
-                        <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xe774;"/>
+                        <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xe774;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem helpers:NavigationHelper.NavigateTo="ETL.ViewModels.HangFireResultsViewModel" l:Uids.Uid="Shell_HangFireResults">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontFamily="{StaticResource SymbolThemeFontFamily}" Glyph="&#xea37;" />
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
             </NavigationView.MenuItems>

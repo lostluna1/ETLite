@@ -192,7 +192,7 @@
   <data name="Shell_WebContent.Content" xml:space="preserve">
     <value>WebContent</value>
   </data>
-  <data name="Settings_Language.Text" xml:space="preserve">
+  <data name="LanguagesComboBox.Header" xml:space="preserve">
     <value>语言设置</value>
   </data>
   <data name="Shell_Step1.Content" xml:space="preserve">
@@ -203,5 +203,110 @@
   </data>
   <data name="Shell_HangfireLog.Content" xml:space="preserve">
     <value>任务运行记录</value>
+  </data>
+  <data name="Shell_HangFireResults.Content" xml:space="preserve">
+    <value>任务运行记录</value>
+  </data>
+  <data name="Expander_Header_DeletedTasks.Text" xml:space="preserve">
+    <value>已删除的任务</value>
+  </data>
+  <data name="Expander_Header_WaitingTasks.Text" xml:space="preserve">
+    <value>待运行的任务</value>
+  </data>
+  <data name="Expander_Header_FailedTasks.Text" xml:space="preserve">
+    <value>已失败的任务</value>
+  </data>
+  <data name="Expander_Header_SuccessfulTasks.Text" xml:space="preserve">
+    <value>成功运行的任务</value>
+  </data>
+  <data name="Expander_Header_RunningTasks.Text" xml:space="preserve">
+    <value>运行中的任务</value>
+  </data>
+  <data name="Expander_Header_QueuedTasks.Text" xml:space="preserve">
+    <value>队列中的任务</value>
+  </data>
+  <data name="Expander_Header_AllTasks.Text" xml:space="preserve">
+    <value>所有任务</value>
+  </data>
+  <data name="DataGrid_TaskLastExecution.Header" xml:space="preserve">
+    <value>上次执行时间</value>
+  </data>
+  <data name="DataGrid_TaskNextExecution.Header" xml:space="preserve">
+    <value>下次执行时间</value>
+  </data>
+  <data name="DataGrid_TaskLastJobState.Header" xml:space="preserve">
+    <value>最近运行状态</value>
+  </data>
+  <data name="DataGrid_TaskEnqueuedAt.Header" xml:space="preserve">
+    <value>入队时间</value>
+  </data>
+  <data name="DataGrid_TaskStartedAt.Header" xml:space="preserve">
+    <value>开始时间</value>
+  </data>
+  <data name="DataGrid_TaskSucceededAt.Header" xml:space="preserve">
+    <value>运行时间</value>
+  </data>
+  <data name="DataGrid_TaskTotalDuration.Header" xml:space="preserve">
+    <value>总耗时(ms)</value>
+  </data>
+  <data name="DataGrid_TaskExceptionMessage.Header" xml:space="preserve">
+    <value>异常信息</value>
+  </data>
+  <data name="DataGrid_TaskFailedAt.Header" xml:space="preserve">
+    <value>失败时间</value>
+  </data>
+  <data name="DataGrid_TaskDeletedAt.Header" xml:space="preserve">
+    <value>删除时间</value>
+  </data>
+  <data name="DataGrid_TaskArgs.Header" xml:space="preserve">
+    <value>参数</value>
+  </data>
+  <data name="DataGrid_TaskWaitingSince.Header" xml:space="preserve">
+    <value>等待时间</value>
+  </data>
+  <data name="DataGrid_TaskMethod.Header" xml:space="preserve">
+    <value>Method</value>
+  </data>
+  <data name="DataGrid_TaskKey.Header" xml:space="preserve">
+    <value>Key</value>
+  </data>
+  <data name="DataGrid_TaskID.Header" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="HangFireResults_NoSelection.Text" xml:space="preserve">
+    <value>Select an item from the list.</value>
+  </data>
+  <data name="Settings_Language_en-us.Text" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="Settings_Language_zh-CN.Text" xml:space="preserve">
+    <value>简体中文</value>
+  </data>
+  <data name="Settings_Language_zh-TW.Text" xml:space="preserve">
+    <value>繁体中文(台湾)</value>
+  </data>
+  <data name="SettingsPage.Content" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <data name="AddConnection.Content" xml:space="preserve">
+    <value>新建连接</value>
+  </data>
+  <data name="ServerAddress.Header" xml:space="preserve">
+    <value>服务器地址</value>
+  </data>
+  <data name="DBName.Header" xml:space="preserve">
+    <value>数据库名称</value>
+  </data>
+  <data name="UserName.Header" xml:space="preserve">
+    <value>用户名</value>
+  </data>
+  <data name="Password.Header" xml:space="preserve">
+    <value>密码</value>
+  </data>
+  <data name="ConnectionName.Header" xml:space="preserve">
+    <value>自定义连接名称</value>
+  </data>
+  <data name="Save.Content" xml:space="preserve">
+    <value>保存</value>
   </data>
 </root>
