@@ -32,6 +32,7 @@
             HorizontalAlignment="Center"
             VerticalAlignment="Bottom"
             Orientation="Horizontal">
+            <!--<local:SettingsPage></local:SettingsPage>-->
             <Button
                 x:Name="PreviousButton"
                 Margin="5"
